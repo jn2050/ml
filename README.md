@@ -1,8 +1,7 @@
-# ml: Docker setup for Machine Learning environment
+# ml: docker setup for machine learning environment
 * Includes Python machine learning, pythorch, fast.ai
   * Currently CPU only
-  * "evolve" means unleash your greatness to be better and better. "LV" are capitalized to acknowledge the nurturing of Learning and Vision ([LV](http://www.lv-nus.org)) group, Nation University of Singapore (NUS).
-* This work was done during Jian Zhao served as a short-term "Texpert" Research Scientist at Tencent FiT DeepSea AI Lab, Shenzhen, China.
+
 
 |Author|João Neto|
 |:---:|:---:|
@@ -17,9 +16,8 @@
 ****
 ### Instalation 
 
-1. https://github.com/jn2050/ml.git
-2. cd ml
-3. docker build -t ml .
+1. git clone https://github.com/jn2050/ml.git
+2. cd ml && docker build -t ml .
 
 ****
 ### Usage 
@@ -50,3 +48,4 @@ Survives Mac reboots. To stop container run:
 ```
 docker stop ml
 ```
+g
