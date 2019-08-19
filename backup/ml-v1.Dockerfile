@@ -1,5 +1,5 @@
-FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
-#FROM ubuntu:18.04
+FROM ubuntu:18.04
+#FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 
 RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
@@ -13,7 +13,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
         ack \
         bash \
         build-essential \
-        clang \
         cmake \
         doxygen \
         exuberant-ctags \
@@ -21,18 +20,12 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
         g++-6 \
         gcc-6 \
         gfortran-6 \
-        git \
         git-core \
         google-mock \
         graphviz \
-        icu-devtools \
         libasound2-dev \
-        libblocksruntime-dev \
         libboost-all-dev \
-        libbsd-dev \
         libbz2-dev \
-        libcurl4-openssl-dev \
-        libedit-dev \
         libeigen3-dev \
         libfftw3-dev \
         libflac-dev \
@@ -40,32 +33,20 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
         libgoogle-glog-dev \
         libgoogle-glog0v5 \
         libgtest-dev \
-        libicu-dev \
         liblzma-dev \
-        libncurses5-dev \
         libogg-dev \
-        libpython-dev \
         libsndfile-dev \
-        libsqlite3-dev \
         libsox-fmt-all \
         libtool \
         libvorbis-dev \
-        libxml2-dev \
         lsyncd \
         mesa-common-dev \
-        ninja-build \
         parallel \
-        pkg-config \
-        python \
         python3-pip \
-        rsync \
         software-properties-common \
         sudo \
-        systemtap-sdt-dev \
-        swig \
         tigervnc-standalone-server \
         ubuntu-drivers-common \
-        uuid-dev \
         vim-nox \
         wget \
         zlib1g-dev 
@@ -86,16 +67,9 @@ RUN echo "mluser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
 USER mluser
 WORKDIR $HOME
 
-RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim && \
-    cd $HOME/downloads && git clone https://github.com/universal-ctags/ctags.git && \
-    cd ctags && ./autogen.sh && ./configure && \
-    make && sudo make install
-
-RUN pip3 install --upgrade pip
-
 ENV PATH="$HOME/anaconda3/bin:$PATH"
 RUN mkdir $HOME/downloads && chown mluser $HOME/downloads && cd $HOME/downloads &&\
-    wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
+    wget https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
     bash $HOME/downloads/Anaconda3-2019.07-Linux-x86_64.sh -b && \
     conda update -y -n base conda
 
@@ -125,17 +99,6 @@ EXPOSE 8888
 
 # RUN pip install awscli --upgrade --user
 
-ENV swift_tf_version=swift-tensorflow-DEVELOPMENT-cuda10.0-cudnn7-ubuntu18.04.tar.gz
-#ENV swift_tf_url=https://storage.googleapis.com/s4tf-kokoro-artifact-testing/latest/
-ENV swift_tf_url=https://storage.googleapis.com/swift-tensorflow-artifacts/nightlies/latest/$swift_tf_version
-RUN cd $HOME/downloads && \
-    wget -q $swift_tf_url && \
-    tar xf $swift_tf_version
-RUN mkdir $HOME/swift && mv $HOME/downloads/usr $HOME/swift && \
-    echo 'export PATH=$HOME/swift/usr/bin:$PATH' >> $HOME/.bashrc
-
-ENV PATH="$HOME/swift/usr/bin:$PATH"
-RUN mkdir $HOME/git && cd $HOME/git && \
-    git clone https://github.com/google/swift-jupyter.git && \
-    cd $HOME/git/swift-jupyter && \
-    python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs   --swift-toolchain $HOME/swift
+# RUN cd $HOME/downloads && git clone https://github.com/universal-ctags/ctags.git && \
+#     cd ctags && ./autogen.sh && ./configure && \
+#     make && sudo make install

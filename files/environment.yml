@@ -1,0 +1,32 @@
+name: ml
+channels:
+  - conda-forge
+  - anaconda
+  - pytorch
+dependencies:
+  - python>=3.7
+  - pip
+  - anaconda
+  - pytorch
+  - torchvision
+  - cudatoolkit=10.0
+  - jupyter_contrib_nbextensions
+  - matplotlib
+  - feather-format
+  - uvicorn
+  - starlette
+  - awscli
+  - fire
+  - sqlalchemy
+  - pymysql
+  - boto3
+  - bcrypt
+  - opencv
+  - librosa
+  - pip:
+    - awscli
+    - starlette-jwt
+    # - pip:
+    #   - --no-cache-dir
+    #   - -rrequirements.txt
+    # --no-deps
