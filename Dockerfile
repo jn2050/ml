@@ -82,32 +82,32 @@ RUN echo "mluser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
     mkdir -p $HOME &&\
     usermod -d $HOME mluser &&\
     usermod -s /bin/bash mluser &&\
-    chown mluser:mluser $HOME
+    chown mluser:mluser $HOME &&\
+    mkdir $HOME/downloads && chown mluser $HOME/downloads 
+
 USER mluser
 WORKDIR $HOME
 
-RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim && \
-    cd $HOME/downloads && git clone https://github.com/universal-ctags/ctags.git && \
-    cd ctags && ./autogen.sh && ./configure && \
-    make && sudo make install
-
-RUN pip3 install --upgrade pip
-
-ENV PATH="$HOME/anaconda3/bin:$PATH"
-RUN mkdir $HOME/downloads && chown mluser $HOME/downloads && cd $HOME/downloads &&\
-    wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
-    bash $HOME/downloads/Anaconda3-2019.07-Linux-x86_64.sh -b && \
-    conda update -y -n base conda
-
 COPY files/ $HOME/files/
 COPY nn/ $HOME/lib/nn
-RUN sudo chown mluser $HOME/files && sudo chown mluser $HOME/lib && sudo chown mluser $HOME/lib/nn
+RUN sudo chown mluser $HOME && sudo chown mluser $HOME/files && sudo chown mluser $HOME/lib && sudo chown mluser $HOME/lib/nn
 RUN cp $HOME/files/.bashrc $HOME &&\
     cp $HOME/files/.exrc $HOME &&\
     cp $HOME/files/.vimrc $HOME &&\
     cp $HOME/files/.inputrc $HOME &&\
     mkdir $HOME/.ssh && cp $HOME/files/ssh_config $HOME/.ssh/config &&\
     mkdir $HOME/.jupyter && cp $HOME/files/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py
+RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim && \
+    cd $HOME/downloads && git clone https://github.com/universal-ctags/ctags.git
+#     cd ctags && ./autogen.sh && ./configure && \
+#     make && sudo make install
+
+RUN pip3 install --upgrade pip
+
+ENV PATH="$HOME/anaconda3/bin:$PATH"
+RUN cd $HOME/downloads && wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
+    bash $HOME/downloads/Anaconda3-2019.07-Linux-x86_64.sh -b && \
+    conda update -y -n base conda
 
 RUN conda env create -f $HOME/files/environment.yml
 RUN conda install -y -c pytorch -c fastai fastai

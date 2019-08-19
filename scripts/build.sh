@@ -24,7 +24,7 @@ docker run -dit \
 #docker rm -f ID
 
 
-# Launch on remote server
+# Launch on CUDA server
 
 docker login
 $(aws ecr get-login --no-include-email --region eu-west-1) &&\
