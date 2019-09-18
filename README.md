@@ -1,6 +1,5 @@
 # ml: docker setup for machine learning environment
 * Includes Python machine learning, pythorch, fast.ai and swift for tensorflow
-  * Currently CPU only
 
 
 |Author|João Neto|
@@ -44,7 +43,7 @@ docker run -it --rm \
     ml /bin/bash
 ```
 
-* Launch Jupyer :
+* Launch Jupyer (survives reboots):
 
 ```
 docker run -dit \
@@ -56,16 +55,16 @@ docker run -dit \
     ml jupyter notebook
 ```
 
-Survives Mac reboots.
 
-To stop container run:
+To stop container:
 
 ```
 docker stop ml
 ```
 
-or to stop and remove image data:
+To stop and remove image:
 
 ```
+docker ps
 docker rm -f <container_id>
 ```
