@@ -16,14 +16,19 @@
 ****
 ### Instalation from source
 
-1. git clone https://github.com/jn2050/ml.git
-2. cd ml && docker build -t ml .
+```
+git clone https://github.com/jn2050/ml.git
+cd ml
+sudo docker build -t ml .
+```
 
 
 ****
 ### Download from dockerhub
 
+```
 docker pull digitallogic/private:ml
+```
 
 
 ****
