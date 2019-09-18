@@ -51,9 +51,16 @@ docker run -dit \
     ml jupyter notebook
 ```
 
-Survives Mac reboots. To stop container run:
+Survives Mac reboots.
+
+To stop container run:
 
 ```
 docker stop ml
 ```
-g
+
+or to stop and remove image data:
+
+```
+docker rm -f <container_id>
+```
