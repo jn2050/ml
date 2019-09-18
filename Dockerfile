@@ -143,11 +143,3 @@ SHELL ["/bin/bash", "-c"]
 COPY lib/utils/ $HOME/lib/utils
 RUN sudo chown -R mluser:mluser $HOME/lib && \
     pip install -e $HOME/lib/utils
-
-# RUN sudo chown mluser:mluser $HOME/lib/utils && \
-#     sudo -H /users/mluser/anaconda3/bin/pip install -e $HOME/lib/utils && \
-#     sudo chown -R mluser:mluser $HOME/lib/utils
-
-# COPY libs/nn/ $HOME/lib/nn
-# RUN sudo chown mluser mluser $HOME/lib/nn && \
-#     sudo -H /users/mluser/anaconda3/bin/pip install -e $HOME/lib/nn
