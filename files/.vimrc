@@ -54,4 +54,4 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 set encoding=utf-8
 
 " My own definitions for plain vi, when vim is not available
-source ~/Dropbox/.exrc
+source .exrc

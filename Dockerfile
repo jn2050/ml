@@ -116,9 +116,10 @@ ENV PATH /usr/local/anaconda3/bin:$PATH
 
 ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
-RUN conda activate ml && jupyter contrib nbextension install --user
-RUN echo "conda activate ml" >> ~/.bashrc
-RUN mkdir $HOME/scripts && echo "conda activate ml && jupyter notebook" > $HOME/scripts/ju.sh
+RUN conda activate ml && jupyter contrib nbextension install --user && \
+    echo "conda activate ml" >> ~/.bashrc && \
+    mkdir $HOME/dev && \
+    mkdir $HOME/scripts && echo "cd $HOME/dev && jupyter notebook" > $HOME/scripts/ju.sh
 EXPOSE 8888
 
 # RUN pip install awscli --upgrade --user
