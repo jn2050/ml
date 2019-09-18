@@ -26,6 +26,7 @@ sudo docker build -t ml .
 ### Download from dockerhub
 
 ```
+docker login
 docker pull digitallogic/private:ml
 ```
 
