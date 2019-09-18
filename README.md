@@ -14,10 +14,17 @@
 
 
 ****
-### Instalation 
+### Instalation from source
 
 1. git clone https://github.com/jn2050/ml.git
 2. cd ml && docker build -t ml .
+
+
+****
+### Download from dockerhub
+
+docker pull digitallogic/private:ml
+
 
 ****
 ### Usage 
@@ -26,6 +33,7 @@
 
 ```
 docker run -it --rm \
+    --privileged \
     -v <your_dev_dir>:/users/mluser/dev \
     -v <your_data_dir>:/users/mluser/data \
     ml /bin/bash
@@ -35,8 +43,8 @@ docker run -it --rm \
 
 ```
 docker run -dit \
+    --privileged \
     --restart unless-stopped \
-    --cap-add SYS_PTRACE \
     -p 8888:8888 \
     -v /Users/jneto/dev:/users/mluser/dev \
     -v /Users/jneto/data:/users/mluser/data \

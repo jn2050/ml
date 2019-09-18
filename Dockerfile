@@ -83,14 +83,13 @@ RUN echo "mluser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
     usermod -d $HOME mluser &&\
     usermod -s /bin/bash mluser &&\
     chown mluser:mluser $HOME &&\
-    mkdir $HOME/downloads && chown mluser $HOME/downloads 
+    mkdir $HOME/downloads && chown mluser:mluser $HOME/downloads 
 
 USER mluser
 WORKDIR $HOME
 
 COPY files/ $HOME/files/
-COPY nn/ $HOME/lib/nn
-RUN sudo chown mluser $HOME && sudo chown mluser $HOME/files && sudo chown mluser $HOME/lib && sudo chown mluser $HOME/lib/nn
+RUN sudo chown mluser:mluser $HOME && sudo chown -R mluser:mluser $HOME
 RUN cp $HOME/files/.bashrc $HOME &&\
     cp $HOME/files/.exrc $HOME &&\
     cp $HOME/files/.vimrc $HOME &&\
@@ -114,7 +113,6 @@ RUN conda install -y -c pytorch -c fastai fastai
 
 RUN conda init bash
 ENV PATH /usr/local/anaconda3/bin:$PATH
-RUN cd $HOME/lib/ && sudo -H /users/mluser/anaconda3/bin/pip install -e nn
 
 ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
@@ -139,3 +137,17 @@ RUN mkdir $HOME/git && cd $HOME/git && \
     git clone https://github.com/google/swift-jupyter.git && \
     cd $HOME/git/swift-jupyter && \
     python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs   --swift-toolchain $HOME/swift
+
+
+SHELL ["/bin/bash", "-c"]
+COPY lib/utils/ $HOME/lib/utils
+RUN sudo chown -R mluser:mluser $HOME/lib && \
+    pip install -e $HOME/lib/utils
+
+# RUN sudo chown mluser:mluser $HOME/lib/utils && \
+#     sudo -H /users/mluser/anaconda3/bin/pip install -e $HOME/lib/utils && \
+#     sudo chown -R mluser:mluser $HOME/lib/utils
+
+# COPY libs/nn/ $HOME/lib/nn
+# RUN sudo chown mluser mluser $HOME/lib/nn && \
+#     sudo -H /users/mluser/anaconda3/bin/pip install -e $HOME/lib/nn
