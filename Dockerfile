@@ -139,6 +139,7 @@ RUN mkdir $HOME/git && cd $HOME/git && \
     cd $HOME/git/swift-jupyter && \
     python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs   --swift-toolchain $HOME/swift
 
+RUN rm -rf $HOME/downloads
 
 SHELL ["/bin/bash", "-c"]
 COPY lib/utils/ $HOME/lib/utils

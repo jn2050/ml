@@ -1,15 +1,10 @@
 
 # ml
 #
-#   AWS setup
-#   aws ecr create-repository --repository-name ml
-#
-# PURGE: docker rm $(docker ps -a -q) && docker rmi $(docker images -q) && docker rmi $(docker images -q) --force
-# RUN: cd ~/dev/proj/ml && ./scripts/build.sh
 #
 
-docker build -t ml .
-# --no-cache
+cd ~/dev/proj/ml
+docker build -t ml . # --no-cache
 
 # mac jupyter
 docker run -dit \
@@ -32,6 +27,7 @@ sudo docker run -it --rm \
 sudo docker run -d \
     --restart unless-stopped \
     --privileged \
+    --gpus all \
     -p 8888:8888 \
     -v /home/jneto/dev:/users/mluser/dev \
     -v /dataf:/users/mluser/data \
