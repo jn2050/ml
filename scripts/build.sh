@@ -1,18 +1,16 @@
 
 #
 # ml
+# Build and upload
 #
+# RUN: ~/dev/lib/ml/scripts/build.sh
 
-cd ~/dev/proj/ml
-docker build -t ml . # --no-cache
-
+cd ~/dev/lib/ml && \
+docker build -t ml . && \
 docker tag ml digitallogic/private:ml && \
-    docker push digitallogic/private:ml
-
-docker pull digitallogic/private:ml
-
-# mac jupyter
+docker rm -f ml-jupyter 2> /dev/null
 docker run -dit \
+    --name ml-jupyter \
     --restart unless-stopped \
     --privileged \
     -p 8888:8888 \
@@ -20,27 +18,10 @@ docker run -dit \
     -v /Users/jneto/data:/users/mluser/data \
     ml /bin/bash scripts/ju.sh
 
-# mac sh
-docker run -it --rm \
-    --privileged \
-    -v /Users/jneto/dev:/users/mluser/dev \
-    -v /Users/jneto/data:/users/mluser/data \
-    ml /bin/bash
+exit 0
+
+docker push digitallogic/private:ml
 
 
-# cuda1 jupyter (jneto)
-sudo docker run -d \
-    --restart unless-stopped \
-    --privileged \
-    --gpus all \
-    -p 8000:8888 \
-    -v /home/jneto/dev:/users/mluser/dev \
-    -v /dataf:/users/mluser/dev/data \
-    digitallogic/private:ml /bin/bash scripts/ju.sh
-
-# cuda1 sh
-sudo docker run -it --rm \
-    --privileged \
-    -v /home/jneto/dev:/users/mluser/dev \
-    -v /dataf:/users/mluser/data \
-    digitallogic/private:ml /bin/bash
+#--FORCE_COPY=True
+#--no-cache

@@ -1,5 +1,4 @@
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
-#FROM ubuntu:18.04
 
 RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
@@ -83,47 +82,21 @@ RUN echo "mluser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
     usermod -d $HOME mluser &&\
     usermod -s /bin/bash mluser &&\
     chown mluser:mluser $HOME &&\
-    mkdir $HOME/downloads && chown mluser:mluser $HOME/downloads 
+    mkdir $HOME/downloads && chown mluser:mluser $HOME/downloads
 
 USER mluser
 WORKDIR $HOME
 
-COPY files/ $HOME/files/
-RUN sudo chown mluser:mluser $HOME && sudo chown -R mluser:mluser $HOME
-RUN cp $HOME/files/.bashrc $HOME &&\
-    cp $HOME/files/.exrc $HOME &&\
-    cp $HOME/files/.vimrc $HOME &&\
-    cp $HOME/files/.inputrc $HOME &&\
-    mkdir $HOME/.ssh && cp $HOME/files/ssh_config $HOME/.ssh/config &&\
-    mkdir $HOME/.jupyter && cp $HOME/files/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py
-RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim && \
-    cd $HOME/downloads && git clone https://github.com/universal-ctags/ctags.git
-#     cd ctags && ./autogen.sh && ./configure && \
-#     make && sudo make install
 
+# python, pip and conda
 RUN pip3 install --upgrade pip
-
 ENV PATH="$HOME/anaconda3/bin:$PATH"
 RUN cd $HOME/downloads && wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
     bash $HOME/downloads/Anaconda3-2019.07-Linux-x86_64.sh -b && \
     conda update -y -n base conda
 
-RUN conda env create -f $HOME/files/environment.yml
-RUN conda install -y -c pytorch -c fastai fastai
 
-RUN conda init bash
-ENV PATH /usr/local/anaconda3/bin:$PATH
-
-ENV BASH_ENV ~/.bashrc
-SHELL ["/bin/bash", "-c"]
-RUN conda activate ml && jupyter contrib nbextension install --user && \
-    echo "conda activate ml" >> ~/.bashrc && \
-    mkdir $HOME/dev && \
-    mkdir $HOME/scripts && echo "cd $HOME/dev && jupyter notebook" > $HOME/scripts/ju.sh
-EXPOSE 8888
-
-# RUN pip install awscli --upgrade --user
-
+# swift
 ENV swift_tf_version=swift-tensorflow-DEVELOPMENT-cuda10.0-cudnn7-ubuntu18.04.tar.gz
 #ENV swift_tf_url=https://storage.googleapis.com/s4tf-kokoro-artifact-testing/latest/
 ENV swift_tf_url=https://storage.googleapis.com/swift-tensorflow-artifacts/nightlies/latest/$swift_tf_version
@@ -133,15 +106,52 @@ RUN cd $HOME/downloads && \
 RUN mkdir $HOME/swift && mv $HOME/downloads/usr $HOME/swift && \
     echo 'export PATH=$HOME/swift/usr/bin:$PATH' >> $HOME/.bashrc
 
+
+COPY files/ $HOME/files/
+RUN sudo chown mluser:mluser $HOME && sudo chown -R mluser:mluser $HOME
+RUN cp $HOME/files/.bashrc $HOME &&\
+    cp $HOME/files/.exrc $HOME &&\
+    cp $HOME/files/.vimrc $HOME &&\
+    mkdir $HOME/.ssh && cp $HOME/files/ssh_config $HOME/.ssh/config &&\
+    mkdir $HOME/.jupyter && cp $HOME/files/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py
+RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim && \
+    git clone https://github.com/universal-ctags/ctags.git $HOME/ctags
+#     cd ctags && ./autogen.sh && ./configure && \
+#     make && sudo make install
+
+
+# conda environment.yml, jupyter
+RUN conda env create -f $HOME/files/environment.yml && \
+    conda init bash
+ENV PATH /usr/local/anaconda3/bin:$PATH
+ENV BASH_ENV ~/.bashrc
+SHELL ["/bin/bash", "-c"]
+RUN conda activate ml && jupyter contrib nbextension install --user && \
+    echo "conda activate ml" >> ~/.bashrc && \
+    mkdir $HOME/dev && \
+    mkdir $HOME/scripts && echo "cd $HOME/dev && jupyter notebook" > $HOME/scripts/ju.sh
+EXPOSE 8888
+
+
+# swift-jupyter
 ENV PATH="$HOME/swift/usr/bin:$PATH"
 RUN mkdir $HOME/git && cd $HOME/git && \
     git clone https://github.com/google/swift-jupyter.git && \
     cd $HOME/git/swift-jupyter && \
     python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs   --swift-toolchain $HOME/swift
-
 RUN rm -rf $HOME/downloads
 
+
 SHELL ["/bin/bash", "-c"]
+
+RUN conda install -y -c pytorch -c fastai fastai
+
 COPY lib/utils/ $HOME/lib/utils
 RUN sudo chown -R mluser:mluser $HOME/lib && \
     pip install -e $HOME/lib/utils
+
+COPY lib/nn/ $HOME/lib/nn
+RUN sudo chown -R mluser:mluser $HOME/lib/nn && \
+    pip install -e $HOME/lib/nn
+
+# ARG FORCE_COPY=unknown

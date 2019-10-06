@@ -3,6 +3,7 @@ channels:
   - conda-forge
   - anaconda
   - pytorch
+  - fastai
 dependencies:
   - python>=3.7
   - pip
@@ -13,20 +14,23 @@ dependencies:
   - jupyter_contrib_nbextensions
   - matplotlib
   - feather-format
+  - requests
   - uvicorn
   - starlette
   - awscli
   - fire
+  - nbformat
   - sqlalchemy
   - pymysql
   - boto3
   - bcrypt
   - opencv
   - librosa
+  - python-dotenv
+  - yaml
+  - xlsxwriter
+  - fastprogress
   - pip:
     - awscli
+    - twilio
     - starlette-jwt
-    # - pip:
-    #   - --no-cache-dir
-    #   - -rrequirements.txt
-    # --no-deps
