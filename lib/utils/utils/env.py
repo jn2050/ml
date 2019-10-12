@@ -34,9 +34,7 @@ def Config_load():
             return None
     return Config
 
-Config = Config_load()
-
-def get_db_url(with_db_name=True):
+def get_db_url(Config, with_db_name=True):
     if Config is None:
         return None
     if not 'db' in Config:
@@ -64,7 +62,7 @@ def get_db_url(with_db_name=True):
         url = f'{url}/{name}'
     return url
 
-def get_rest_url():
+def get_rest_url(Config):
     if Config is None:
         return None
     if not 'rest' in Config:
@@ -76,7 +74,7 @@ def get_rest_url():
     else:
         if not 'host_dev' in Config['rest']:
             return None
-        host = Config['db']['host_dev']
+        host = Config['rest']['host_dev']
     if not 'port' in Config['rest']:
         return None
     port = Config['rest']['port']
