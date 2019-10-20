@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+
+  ml:
+    image: ml
+    restart: always
+    deploy:
+      replicas: 1
+    depends_on:
+      - db
+    environment:
+      - development=True
+    ports:
+    - "8888:8888"
+    volumes:
+      - /Users/jneto/dev:/users/mluser/dev
+      - /Users/jneto/data:/users/mluser/data
+    command: /bin/bash scripts/ju.sh
+    networks:
+      - testnet
+
+  db:
+    image: mysql:8.0.17
+    restart: always
+    deploy:
+      replicas: 1
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootroot
+    ports:
+      - "3300:3306"
+    volumes:
+      - sqlvolume:/var/lib/mysql
+    networks:
+      - testnet
+
+volumes:
+  sqlvolume:
+      external:
+        name: db-mysql-tests
+      
+networks:
+  testnet:

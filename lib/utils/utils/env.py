@@ -26,15 +26,15 @@ def Config_load():
     load_dotenv()
     fname = find_yml()
     if fname is None:
-        return None
+        return None, 'Config_load ERROR: Cant find .Config.yml'
     with open(str(fname), 'r') as stream:
         try:
             Config = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
-            return None
-    return Config
+            return None, f'Config_load ERROR: .Config.yml parsing error (str({exc}))'
+    return Config, None
 
-def get_db_url(Config, with_db_name=True):
+def get_db_url(Config, with_db_name=False):
     if Config is None:
         return None
     if not 'db' in Config:
@@ -53,12 +53,12 @@ def get_db_url(Config, with_db_name=True):
         port = Config['db']['port']
     if not 'name' in Config['db']:
         return None
-    name = Config['db']['name']
     if not 'passwd' in Config['db']:
         return None
     passwd = Config['db']['passwd']
     url = f'mysql+pymysql://root:{passwd}@{host}:{port}'
     if with_db_name:
+        name = Config['db']['name']
         url = f'{url}/{name}'
     return url
 

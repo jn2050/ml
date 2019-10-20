@@ -5,9 +5,15 @@
 #
 # RUN: ~/dev/lib/ml/scripts/build.sh
 
-cd ~/dev/lib/ml && \
+cd ~/dev/lib/ml
+docker stack rm ml
 docker build -t ml . && \
-docker tag ml digitallogic/private:ml && \
+docker tag ml digitallogic/private:ml
+sleep 10
+docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
+
+exit 0
+
 docker rm -f ml-jupyter 2> /dev/null
 docker run -dit \
     --name ml-jupyter \
@@ -23,5 +29,6 @@ exit 0
 docker push digitallogic/private:ml
 
 
-#--FORCE_COPY=True
-#--no-cache
+# Environment with db
+# docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
+# docker stack rm ml
