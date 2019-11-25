@@ -146,7 +146,7 @@ SHELL ["/bin/bash", "-c"]
 
 RUN conda install -y -c pytorch -c fastai fastai
 
-# RUN pwd
+RUN pwd
 COPY lib/utils/ $HOME/lib/utils
 RUN sudo chown -R mluser:mluser $HOME/lib && \
     pip install -e $HOME/lib/utils

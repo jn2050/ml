@@ -9,8 +9,12 @@ cd ~/dev/lib/ml
 docker stack rm ml
 docker build -t ml . && \
 docker tag ml digitallogic/private:ml
-sleep 10
+sleep 20
 docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
+
+exit 0
+
+docker push digitallogic/private:ml
 
 exit 0
 
@@ -23,11 +27,6 @@ docker run -dit \
     -v /Users/jneto/dev:/users/mluser/dev \
     -v /Users/jneto/data:/users/mluser/data \
     ml /bin/bash scripts/ju.sh
-
-exit 0
-
-docker push digitallogic/private:ml
-
 
 # Environment with db
 # docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
