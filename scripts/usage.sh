@@ -45,7 +45,7 @@ sudo docker run -d \
     --restart unless-stopped \
     --privileged \
     --gpus all \
-    -p 8000:8888 \
+    -p 800o:8888 \
     -v /home/jneto/dev:/users/mluser/dev \
     -v /dataf:/users/mluser/dev/data \
     digitallogic/private:ml /bin/bash scripts/ju.sh

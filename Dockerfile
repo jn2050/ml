@@ -129,7 +129,8 @@ SHELL ["/bin/bash", "-c"]
 RUN conda activate ml && jupyter contrib nbextension install --user && \
     echo "conda activate ml" >> ~/.bashrc && \
     mkdir $HOME/dev && \
-    mkdir $HOME/scripts && echo "cd $HOME/dev && jupyter notebook" > $HOME/scripts/ju.sh
+    # mkdir $HOME/scripts && echo "cd $HOME/dev && jupyter notebook" > $HOME/scripts/ju.sh
+    mkdir $HOME/scripts && cp $HOME/files/ju.sh $HOME/scripts
 EXPOSE 8888
 
 
@@ -138,7 +139,7 @@ ENV PATH="$HOME/swift/usr/bin:$PATH"
 RUN mkdir $HOME/git && cd $HOME/git && \
     git clone https://github.com/google/swift-jupyter.git && \
     cd $HOME/git/swift-jupyter && \
-    python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs   --swift-toolchain $HOME/swift
+    python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs --swift-toolchain $HOME/swift
 RUN rm -rf $HOME/downloads
 
 
@@ -146,7 +147,6 @@ SHELL ["/bin/bash", "-c"]
 
 RUN conda install -y -c pytorch -c fastai fastai
 
-RUN pwd
 COPY lib/utils/ $HOME/lib/utils
 RUN sudo chown -R mluser:mluser $HOME/lib && \
     pip install -e $HOME/lib/utils
@@ -154,3 +154,7 @@ RUN sudo chown -R mluser:mluser $HOME/lib && \
 COPY lib/nn/ $HOME/lib/nn
 RUN sudo chown -R mluser:mluser $HOME/lib/nn && \
     pip install -e $HOME/lib/nn
+
+COPY lib/nn2/ $HOME/lib/nn2
+RUN sudo chown -R mluser:mluser $HOME/lib/nn2 && \
+    pip install -e $HOME/lib/nn2
