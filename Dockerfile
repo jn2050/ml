@@ -87,7 +87,6 @@ RUN echo "mluser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
 USER mluser
 WORKDIR $HOME
 
-
 # python, pip and conda
 RUN pip3 install --upgrade pip
 ENV PATH="$HOME/anaconda3/bin:$PATH"
@@ -108,7 +107,7 @@ RUN mkdir $HOME/swift && mv $HOME/downloads/usr $HOME/swift && \
 
 
 COPY files/ $HOME/files/
-RUN sudo chown mluser:mluser $HOME && sudo chown -R mluser:mluser $HOME
+RUN sudo chown -R mluser:mluser $HOME
 RUN cp $HOME/files/.bashrc $HOME &&\
     cp $HOME/files/.exrc $HOME &&\
     cp $HOME/files/.vimrc $HOME &&\
@@ -146,6 +145,18 @@ RUN rm -rf $HOME/downloads
 SHELL ["/bin/bash", "-c"]
 
 RUN conda install -y -c pytorch -c fastai fastai
+
+# Install mysql cli
+RUN sudo apt-get update && \
+    sudo apt-get install -y mysql-client
+
+# Install docker cli on the docker image
+ENV curl_path=$HOME/anaconda3/envs/ml/bin/curl
+ENV DOCKERVERSION=18.03.1-ce
+ENV docker_url=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz
+RUN sudo ${curl_path} -fsSLO ${docker_url} && \
+    sudo tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 -C /usr/local/bin docker/docker && \
+    sudo rm docker-${DOCKERVERSION}.tgz
 
 COPY lib/utils/ $HOME/lib/utils
 RUN sudo chown -R mluser:mluser $HOME/lib && \

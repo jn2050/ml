@@ -14,6 +14,7 @@ services:
     ports:
     - "8888:8888"
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - /Users/jneto/dev:/users/mluser/dev
       - /Users/jneto/data:/users/mluser/data
     command: /bin/bash scripts/ju.sh
