@@ -6,7 +6,6 @@
 # RUN: ~/dev/lib/ml/scripts/build.sh
 
 cd ~/dev/lib/ml
-scripts/cp-nn2.sh
 docker stack rm ml
 docker build -t ml . && \
 docker tag ml digitallogic/private:ml
@@ -15,6 +14,11 @@ docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
 
 docker push digitallogic/private:ml
 ssh -i ~/.ssh/id_rsa_cuda -p 9022 jneto@ml.dlogic.io /home/jneto/scripts/ml.sh
+exit 0
+
+# DB
+docker exec -it `docker ps | grep ml_db | awk '{print $1}'` /usr/bin/psql -U postgres
+
 exit 0
 
 docker rm -f ml-jupyter 2> /dev/null

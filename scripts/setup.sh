@@ -1,4 +1,5 @@
 
+docker volume create ml-db-pg
 
 docker-machine create \
     --driver generic \

@@ -34,3 +34,6 @@ dependencies:
     - awscli
     - twilio
     - starlette-jwt
+    - asyncpg
+    - pika
+    - redis

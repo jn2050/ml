@@ -22,23 +22,29 @@ services:
       - testnet
 
   db:
-    image: mysql:8.0.17
+    image: postgres
     restart: always
     deploy:
       replicas: 1
     environment:
-      - MYSQL_ROOT_PASSWORD=rootroot
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=rootroot
+      - PGDATA=/var/lib/postgresql/data
+      # - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
-      - "3300:3306"
+      - "5433:5432"
     volumes:
-      - sqlvolume:/var/lib/mysql
+      - ml-db-pg:/var/lib/postgresql/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
     networks:
       - testnet
-
+    
 volumes:
-  sqlvolume:
-      external:
-        name: db-mysql-tests
+  ml-db-pg:
+    external: true
       
 networks:
   testnet:
