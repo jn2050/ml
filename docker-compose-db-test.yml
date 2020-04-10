@@ -21,30 +21,30 @@ services:
     networks:
       - testnet
 
-  db:
-    image: postgres
-    restart: always
-    deploy:
-      replicas: 1
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=rootroot
-      - PGDATA=/var/lib/postgresql/data
-      # - PGDATA=/var/lib/postgresql/data/pgdata
-    ports:
-      - "5433:5432"
-    volumes:
-      - ml-db-pg:/var/lib/postgresql/data
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-    networks:
-      - testnet
+#   db:
+#     image: postgres
+#     restart: always
+#     deploy:
+#       replicas: 1
+#     environment:
+#       - POSTGRES_DB=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=rootroot
+#       - PGDATA=/var/lib/postgresql/data
+#       # - PGDATA=/var/lib/postgresql/data/pgdata
+#     ports:
+#       - "5433:5432"
+#     volumes:
+#       - ml-db-pg:/var/lib/postgresql/data
+#     deploy:
+#       placement:
+#         constraints: [node.role == manager]
+#     networks:
+#       - testnet
     
-volumes:
-  ml-db-pg:
-    external: true
+# volumes:
+#   ml-db-pg:
+#     external: true
       
 networks:
   testnet:
