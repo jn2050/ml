@@ -39,4 +39,5 @@ dependencies:
     - redis
     - nest_asyncio
     - xlrd
+    - xlwt
     - seaborn

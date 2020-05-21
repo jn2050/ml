@@ -82,7 +82,7 @@ RUN echo "mluser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
     usermod -d $HOME mluser &&\
     usermod -s /bin/bash mluser &&\
     chown mluser:mluser $HOME &&\
-    mkdir $HOME/downloads && chown mluser:mluser $HOME/downloads
+    mkdir $HOME/downloads && chown mluser:mluser $HOME/downloads && chmod 777 $HOME/downloads
 
 USER mluser
 WORKDIR $HOME
@@ -90,20 +90,20 @@ WORKDIR $HOME
 # python, pip and conda
 RUN pip3 install --upgrade pip
 ENV PATH="$HOME/anaconda3/bin:$PATH"
-RUN cd $HOME/downloads && wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
+RUN cd $HOME/downloads && \
+    wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
     bash $HOME/downloads/Anaconda3-2019.07-Linux-x86_64.sh -b && \
-    conda update -y -n base conda
+    conda update -y -n base -c defaults conda
 
 
 # swift
-ENV swift_tf_version=swift-tensorflow-DEVELOPMENT-cuda10.0-cudnn7-ubuntu18.04.tar.gz
-#ENV swift_tf_url=https://storage.googleapis.com/s4tf-kokoro-artifact-testing/latest/
-ENV swift_tf_url=https://storage.googleapis.com/swift-tensorflow-artifacts/nightlies/latest/$swift_tf_version
-RUN cd $HOME/downloads && \
-    wget -q $swift_tf_url && \
-    tar xf $swift_tf_version
-RUN mkdir $HOME/swift && mv $HOME/downloads/usr $HOME/swift && \
-    echo 'export PATH=$HOME/swift/usr/bin:$PATH' >> $HOME/.bashrc
+#ENV swift_tf_version=swift-tensorflow-DEVELOPMENT-cuda10.0-cudnn7-ubuntu18.04.tar.gz
+#ENV swift_tf_url=https://storage.googleapis.com/swift-tensorflow-artifacts/nightlies/latest/$swift_tf_version
+#RUN cd $HOME/downloads && \
+#    wget -q $swift_tf_url && \
+#    tar xf $swift_tf_version
+#RUN mkdir $HOME/swift && mv $HOME/downloads/usr $HOME/swift && \
+#    echo 'export PATH=$HOME/swift/usr/bin:$PATH' >> $HOME/.bashrc
 
 
 COPY files/ $HOME/files/
@@ -120,7 +120,8 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vund
 
 
 # conda environment.yml, jupyter
-RUN conda env create -f $HOME/files/environment.yml && \
+RUN conda clean -y -a && \
+    conda env create -f $HOME/files/environment.yml && \
     conda init bash
 ENV PATH /usr/local/anaconda3/bin:$PATH
 ENV BASH_ENV ~/.bashrc
@@ -134,13 +135,13 @@ EXPOSE 8888
 
 
 # swift-jupyter
-ENV PATH="$HOME/swift/usr/bin:$PATH"
-RUN mkdir $HOME/git && cd $HOME/git && \
-    git clone https://github.com/google/swift-jupyter.git && \
-    cd $HOME/git/swift-jupyter && \
-    python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs --swift-toolchain $HOME/swift
-RUN rm -rf $HOME/downloads
+#ENV PATH="$HOME/swift/usr/bin:$PATH"
+#RUN mkdir $HOME/git && cd $HOME/git && \
+#    git clone https://github.com/google/swift-jupyter.git && \
+#    cd $HOME/git/swift-jupyter && \
+#    python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs --swift-toolchain $HOME/swift
 
+RUN rm -rf $HOME/downloads
 
 SHELL ["/bin/bash", "-c"]
 
