@@ -130,7 +130,7 @@ RUN conda activate ml && jupyter contrib nbextension install --user && \
     echo "conda activate ml" >> ~/.bashrc && \
     mkdir $HOME/dev && \
     # mkdir $HOME/scripts && echo "cd $HOME/dev && jupyter notebook" > $HOME/scripts/ju.sh
-    mkdir $HOME/scripts && cp $HOME/files/ju.sh $HOME/scripts
+    mkdir $HOME/scripts && cp $HOME/files/ju.sh $HOME/scripts && chmod 777 $HOME/scripts/*
 EXPOSE 8888
 
 

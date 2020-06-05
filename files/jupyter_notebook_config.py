@@ -764,8 +764,10 @@
 #  By default, all installed kernels are allowed.
 #c.KernelSpecManager.whitelist = set()
 
-c.NotebookApp.open_browser = False
+c.NotebookApp.ip = '*'
 c.NotebookApp.token = ''
+c.NotebookApp.password = ''
+# c.NotebookApp.password = u'sha1:2f478cf1dee1:4d46fb934ec2fbf63d9d2fc2d921c6ef9b23ffcb'
+c.NotebookApp.open_browser = False
 c.NotebookApp.iopub_data_rate_limit = 10000000000
-c.NotebookApp.ip = "0.0.0.0"
 c.NotebookApp.port = 8888

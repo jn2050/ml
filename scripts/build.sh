@@ -1,26 +1,14 @@
-
-#
 # ml
 # Build and upload
 #
 # RUN: ~/dev/lib/ml/scripts/build.sh
 
 cd ~/dev/lib/ml
-docker stack rm ml
 docker build -t ml . && \
 docker tag ml digitallogic/private:ml
 sleep 20
-docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
 
-docker push digitallogic/private:ml
-ssh -i ~/.ssh/id_rsa_cuda -p 9022 jneto@ml.dlogic.io /home/jneto/scripts/ml.sh
-exit 0
-
-# DB
-docker exec -it `docker ps | grep ml_db | awk '{print $1}'` /usr/bin/psql -U postgres
-
-exit 0
-
+# Launch in mac
 docker rm -f ml-jupyter 2> /dev/null
 docker run -dit \
     --name ml-jupyter \
@@ -32,11 +20,20 @@ docker run -dit \
     -v /Users/jneto/data:/users/mluser/data \
     ml /bin/bash scripts/ju.sh
 
+# Launch on cuda1
+docker push digitallogic/private:ml
+ssh -i ~/.ssh/id_rsa_cuda -p 9022 jneto@ml.dlogic.io /home/jneto/scripts/ml.sh
+
+exit 0
+
+# DB
+docker exec -it `docker ps | grep ml_db | awk '{print $1}'` /usr/bin/psql -U postgres
+
 # Environment with db
+docker stack rm ml
+docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
 # docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
 # docker stack rm ml
-
-# --no-cache
 
 
 # Debug
@@ -49,4 +46,5 @@ docker run -it \
     -v /Users/jneto/data:/users/mluser/data \
     ml /bin/bash
 
-exit 0
+# docker container prune
+# --no-cache
