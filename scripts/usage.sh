@@ -10,7 +10,7 @@ docker run -it --rm \
     --privileged \
     -v /Users/jneto/dev:/users/mluser/dev \
     -v /Users/jneto/data:/users/mluser/data \
-    ml /bin/bash
+    digitallogic/private:ml /bin/bash
 
 # mac jupyter
 docker run -dit \
@@ -20,7 +20,7 @@ docker run -dit \
     -p 8888:8888 \
     -v /Users/jneto/dev:/users/mluser/dev \
     -v /Users/jneto/data:/users/mluser/data \
-    ml /bin/bash scripts/ju.sh
+    digitallogic/private:ml /bin/bash scripts/ju.sh
 
 # mac stop jupyter
 docker rm -f ml-jupyter
