@@ -93,33 +93,18 @@ ENV PATH="$HOME/anaconda3/bin:$PATH"
 RUN cd $HOME/downloads && \
     wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
     bash $HOME/downloads/Anaconda3-2019.07-Linux-x86_64.sh -b && \
-    conda update -y -n base -c defaults conda
-
-
-# swift
-#ENV swift_tf_version=swift-tensorflow-DEVELOPMENT-cuda10.0-cudnn7-ubuntu18.04.tar.gz
-#ENV swift_tf_url=https://storage.googleapis.com/swift-tensorflow-artifacts/nightlies/latest/$swift_tf_version
-#RUN cd $HOME/downloads && \
-#    wget -q $swift_tf_url && \
-#    tar xf $swift_tf_version
-#RUN mkdir $HOME/swift && mv $HOME/downloads/usr $HOME/swift && \
-#    echo 'export PATH=$HOME/swift/usr/bin:$PATH' >> $HOME/.bashrc
-
+    conda update -y -n base -c defaults conda && \
+    cd $HOME && rm -rf $HOME/downloads
 
 COPY files/ $HOME/files/
-RUN sudo chown -R mluser:mluser $HOME
-RUN cp $HOME/files/.bashrc $HOME &&\
+RUN sudo chown -R mluser:mluser $HOME &&\
+    cp $HOME/files/.bashrc $HOME &&\
     cp $HOME/files/.exrc $HOME &&\
     cp $HOME/files/.vimrc $HOME &&\
     mkdir $HOME/.ssh && cp $HOME/files/ssh_config $HOME/.ssh/config &&\
     mkdir $HOME/.jupyter && cp $HOME/files/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py
-RUN git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim && \
-    git clone https://github.com/universal-ctags/ctags.git $HOME/ctags
-#     cd ctags && ./autogen.sh && ./configure && \
-#     make && sudo make install
 
-
-# conda environment.yml, jupyter
+# conda, python packages, environment.yml, jupyter
 RUN conda clean -y -a && \
     conda env create -f $HOME/files/environment.yml && \
     conda init bash
@@ -129,43 +114,24 @@ SHELL ["/bin/bash", "-c"]
 RUN conda activate ml && jupyter contrib nbextension install --user && \
     echo "conda activate ml" >> ~/.bashrc && \
     mkdir $HOME/dev && \
-    # mkdir $HOME/scripts && echo "cd $HOME/dev && jupyter notebook" > $HOME/scripts/ju.sh
     mkdir $HOME/scripts && cp $HOME/files/ju.sh $HOME/scripts && chmod 777 $HOME/scripts/*
-EXPOSE 8888
-
-
-# swift-jupyter
-#ENV PATH="$HOME/swift/usr/bin:$PATH"
-#RUN mkdir $HOME/git && cd $HOME/git && \
-#    git clone https://github.com/google/swift-jupyter.git && \
-#    cd $HOME/git/swift-jupyter && \
-#    python register.py --sys-prefix --swift-python-use-conda --use-conda-shared-libs --swift-toolchain $HOME/swift
-
-RUN rm -rf $HOME/downloads
-
-SHELL ["/bin/bash", "-c"]
-
-RUN conda install -y -c pytorch -c fastai fastai
-
-# Install mysql cli
-RUN sudo apt-get update && \
-    sudo apt-get install -y mysql-client
 
 # Install docker cli on the docker image
 ENV curl_path=$HOME/anaconda3/envs/ml/bin/curl
-ENV DOCKERVERSION=18.03.1-ce
+ENV DOCKERVERSION=18.06.3-ce
 ENV docker_url=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz
-RUN sudo ${curl_path} -fsSLO ${docker_url} && \
+RUN sudo ${curl_path} -fsSLO $docker_url && \
     sudo tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 -C /usr/local/bin docker/docker && \
     sudo rm docker-${DOCKERVERSION}.tgz
+
+EXPOSE 8888
+SHELL ["/bin/bash", "-c"]
+
+RUN conda install -c fastai -c pytorch -c anaconda fastai gh anaconda
 
 COPY lib/utils/ $HOME/lib/utils
 RUN sudo chown -R mluser:mluser $HOME/lib && \
     pip install -e $HOME/lib/utils
-
-COPY lib/nn/ $HOME/lib/nn
-RUN sudo chown -R mluser:mluser $HOME/lib/nn && \
-    pip install -e $HOME/lib/nn
 
 COPY lib/nn2/ $HOME/lib/nn2
 RUN sudo chown -R mluser:mluser $HOME/lib/nn2 && \
