@@ -33,6 +33,7 @@ dependencies:
   - pip:
     - awscli
     - twilio
+    - sendgrid
     - starlette-jwt
     - asyncpg
     - pika
