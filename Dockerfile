@@ -127,7 +127,13 @@ RUN sudo ${curl_path} -fsSLO $docker_url && \
 EXPOSE 8888
 SHELL ["/bin/bash", "-c"]
 
-RUN conda install -c fastai -c pytorch -c anaconda fastai gh anaconda
+# RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
+# RUN pip install -U fastai
+# https://github.com/fastai/docker-containers/blob/master/fastai-build/Dockerfile
+# RUN git clone https://github.com/fastai/fastcore &&\
+#     pip install -e "fastcore[dev]" &&\
+#     git clone https://github.com/fastai/fastai &&\
+#     pip install -e "fastai[dev]"
 
 COPY lib/utils/ $HOME/lib/utils
 RUN sudo chown -R mluser:mluser $HOME/lib && \
