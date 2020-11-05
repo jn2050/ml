@@ -136,7 +136,7 @@ SHELL ["/bin/bash", "-c"]
 #     pip install -e "fastai[dev]"
 
 COPY lib/utils/ $HOME/lib/utils
-RUN sudo chown -R mluser:mluser $HOME/lib && \
+RUN sudo chown -R mluser:mluser $HOME/lib/utils && \
     pip install -e $HOME/lib/utils
 
 COPY lib/nn2/ $HOME/lib/nn2
