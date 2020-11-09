@@ -1,4 +1,7 @@
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+# FROM nvidia/cuda:11.1-base
+# FROM nvidia/cuda:11.1-devel
+# https://hub.docker.com/r/nvidia/cuda/
 
 RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
@@ -108,6 +111,7 @@ RUN sudo chown -R mluser:mluser $HOME &&\
 RUN conda clean -y -a && \
     conda env create -f $HOME/files/environment.yml && \
     conda init bash
+# RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch
 ENV PATH /usr/local/anaconda3/bin:$PATH
 ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
@@ -135,9 +139,7 @@ SHELL ["/bin/bash", "-c"]
 #     git clone https://github.com/fastai/fastai &&\
 #     pip install -e "fastai[dev]"
 
-COPY lib/utils/ $HOME/lib/utils
-RUN sudo chown -R mluser:mluser $HOME/lib/utils && \
-    pip install -e $HOME/lib/utils
+RUN pip install -U dlogicutils
 
 COPY lib/nn2/ $HOME/lib/nn2
 RUN sudo chown -R mluser:mluser $HOME/lib/nn2 && \

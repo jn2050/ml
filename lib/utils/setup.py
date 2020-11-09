@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-setup(name='nn2',
+setup(name='utils',
       version='0.0',
       description='utils lib',
       author='João Neto',
