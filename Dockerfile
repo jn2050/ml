@@ -49,12 +49,13 @@ RUN cd $HOME/downloads &&\
     conda init bash
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
-RUN conda activate ml &&\
-    jupyter contrib nbextension install --user
 
-RUN conda install -y -c anaconda opencv
+# RUN conda install -y -c anaconda opencv
+RUN conda install -y -c conda-forge opencv
 RUN conda install -y tensorflow-gpu
 RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
+
+RUN jupyter contrib nbextension install --user
 
 # ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install -U dlogicutils
