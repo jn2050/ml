@@ -1,146 +1,63 @@
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
-# FROM nvidia/cuda:11.1-base
-# FROM nvidia/cuda:11.1-devel
-# https://hub.docker.com/r/nvidia/cuda/
 
-RUN apt-get update && \
-    export DEBIAN_FRONTEND=noninteractive && \
-    ln -fs /usr/share/zoneinfo/Europe/Lisbon /etc/localtime && \
-    apt-get install -y tzdata && \
-    dpkg-reconfigure --frontend noninteractive tzdata
-
-RUN export DEBIAN_FRONTEND=noninteractive && \
-    apt-get update && \
+RUN export DEBIAN_FRONTEND=noninteractive &&\
+    apt-get update &&\
     apt-get install -y --fix-missing \
-        ack \
-        bash \
-        build-essential \
-        clang \
-        cmake \
-        doxygen \
-        exuberant-ctags \
-        firefox \
-        g++-6 \
-        gcc-6 \
-        gfortran-6 \
-        git \
-        git-core \
-        google-mock \
-        graphviz \
-        icu-devtools \
-        libasound2-dev \
-        libblocksruntime-dev \
-        libboost-all-dev \
-        libbsd-dev \
-        libbz2-dev \
-        libcurl4-openssl-dev \
-        libedit-dev \
-        libeigen3-dev \
-        libfftw3-dev \
-        libflac-dev \
-        libgflags-dev \
-        libgoogle-glog-dev \
-        libgoogle-glog0v5 \
-        libgtest-dev \
-        libicu-dev \
-        liblzma-dev \
-        libncurses5-dev \
-        libogg-dev \
-        libpython-dev \
-        libsndfile-dev \
-        libsqlite3-dev \
-        libsox-fmt-all \
-        libtool \
-        libvorbis-dev \
-        libxml2-dev \
-        lsyncd \
-        mesa-common-dev \
-        ninja-build \
-        parallel \
-        pkg-config \
-        python \
-        python3-pip \
-        rsync \
-        software-properties-common \
-        sudo \
-        systemtap-sdt-dev \
-        swig \
-        tigervnc-standalone-server \
-        ubuntu-drivers-common \
-        uuid-dev \
-        vim-nox \
-        wget \
-        zlib1g-dev 
+        sudo bash wget curl rsync vim-nox uuid-dev gfortran-6 python python3-pip git git-core
 
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 40 \
-        --slave /usr/bin/g++ g++ /usr/bin/g++-6 --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-6 &&\
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 40 \
-        --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-7
+ENV DOCKER_VER=18.06.3-ce    
+ENV DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VER}.tgz
+RUN curl -fsSLO $DOCKER_URL &&\
+    tar xzvf docker-${DOCKER_VER}.tgz --strip 1 -C /usr/local/bin docker/docker &&\
+    rm docker-${DOCKER_VER}.tgz
 
-ENV HOME=/users/mluser
-RUN echo "mluser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
-    groupadd -g 999 mluser &&\
-    useradd -r -u 999 -g mluser mluser &&\
+ENV HOME=/users/ml
+RUN echo "ml ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
+    groupadd -g 999 ml &&\
+    useradd -r -u 999 -g ml ml &&\
     mkdir -p $HOME &&\
-    usermod -d $HOME mluser &&\
-    usermod -s /bin/bash mluser &&\
-    chown mluser:mluser $HOME &&\
-    mkdir $HOME/downloads && chown mluser:mluser $HOME/downloads && chmod 777 $HOME/downloads
+    usermod -d $HOME ml &&\
+    usermod -s /bin/bash ml &&\
+    chown ml:ml $HOME &&\
+    mkdir $HOME/downloads && chown ml:ml $HOME/downloads && chmod 777 $HOME/downloads
 
-USER mluser
+USER ml
 WORKDIR $HOME
 
-# python, pip and conda
-RUN pip3 install --upgrade pip
-ENV PATH="$HOME/anaconda3/bin:$PATH"
-RUN cd $HOME/downloads && \
-    wget -q https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh && \
-    bash $HOME/downloads/Anaconda3-2019.07-Linux-x86_64.sh -b && \
-    conda update -y -n base -c defaults conda && \
-    cd $HOME && rm -rf $HOME/downloads
-
 COPY files/ $HOME/files/
-RUN sudo chown -R mluser:mluser $HOME &&\
+RUN sudo chown -R ml:ml $HOME &&\
     cp $HOME/files/.bashrc $HOME &&\
     cp $HOME/files/.exrc $HOME &&\
     cp $HOME/files/.vimrc $HOME &&\
     mkdir $HOME/.ssh && cp $HOME/files/ssh_config $HOME/.ssh/config &&\
-    mkdir $HOME/.jupyter && cp $HOME/files/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py
+    mkdir $HOME/.jupyter && cp $HOME/files/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py &&\
+    mkdir $HOME/scripts && cp $HOME/files/ju.sh $HOME/scripts && chmod 777 $HOME/scripts/* &&\
+    mkdir $HOME/dev
 
-# conda, python packages, environment.yml, jupyter
-RUN conda clean -y -a && \
-    conda env create -f $HOME/files/environment.yml && \
-    conda init bash
-# RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch
-ENV PATH /usr/local/anaconda3/bin:$PATH
+ENV PATH="$HOME/anaconda3/bin:$PATH"
+ENV PATH="/usr/local/anaconda3/bin:$PATH"
+ENV ANACONDA_VER=Anaconda3-2020.07-Linux-x86_64.sh
 ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
-RUN conda activate ml && jupyter contrib nbextension install --user && \
-    echo "conda activate ml" >> ~/.bashrc && \
-    mkdir $HOME/dev && \
-    mkdir $HOME/scripts && cp $HOME/files/ju.sh $HOME/scripts && chmod 777 $HOME/scripts/*
 
-# Install docker cli on the docker image
-ENV curl_path=$HOME/anaconda3/envs/ml/bin/curl
-ENV DOCKERVERSION=18.06.3-ce
-ENV docker_url=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz
-RUN sudo ${curl_path} -fsSLO $docker_url && \
-    sudo tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 -C /usr/local/bin docker/docker && \
-    sudo rm docker-${DOCKERVERSION}.tgz
+RUN pip3 install --upgrade pip
+RUN cd $HOME/downloads &&\
+    wget -q https://repo.anaconda.com/archive/$ANACONDA_VER &&\
+    bash $ANACONDA_VER -b &&\
+    rm $ANACONDA_VER &&\
+    conda update -y -n base -c defaults conda &&\
+    conda init bash
+RUN conda env create -f $HOME/files/environment.yml &&\
+    echo "conda activate ml" >> ~/.bashrc
+RUN conda activate ml &&\
+    jupyter contrib nbextension install --user
 
-EXPOSE 8888
-SHELL ["/bin/bash", "-c"]
+RUN conda install -y -c anaconda opencv
+RUN conda install -y tensorflow-gpu
+RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
 
-# RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
-# RUN pip install -U fastai
-# https://github.com/fastai/docker-containers/blob/master/fastai-build/Dockerfile
-# RUN git clone https://github.com/fastai/fastcore &&\
-#     pip install -e "fastcore[dev]" &&\
-#     git clone https://github.com/fastai/fastai &&\
-#     pip install -e "fastai[dev]"
-
+# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install -U dlogicutils
-
-COPY lib/nn2/ $HOME/lib/nn2
-RUN sudo chown -R mluser:mluser $HOME/lib/nn2 && \
-    pip install -e $HOME/lib/nn2
+COPY --chown=ml:ml lib/nn2/ $HOME/lib/nn2
+RUN pip install -e $HOME/lib/nn2
+# sudo chown -R ml:ml $HOME/lib/nn2 && 

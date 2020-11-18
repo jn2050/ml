@@ -1,46 +1,36 @@
 name: ml
 channels:
-  - conda-forge
   - anaconda
-  - pytorch
-  - fastai
+  - conda-forge
 dependencies:
   - python>=3.7
   - pip
-  - anaconda
-  - pytorch
-  - torchvision
-  - cudatoolkit=10.0
-  - jupyter_contrib_nbextensions
-  - matplotlib
-  - feather-format
   - requests
   - uvicorn
   - starlette
-  - awscli
-  - fire
-  - nbformat
-  - sqlalchemy
-  - pymysql
-  - boto3
   - bcrypt
-  - opencv
-  - librosa
   - python-dotenv
   - yaml
+  - fire
+  - boto3
+  - feather-format
+  - jupyter_contrib_nbextensions
   - xlsxwriter
-  - fastprogress
+  - matplotlib
+  - scikit-learn
   - pip:
-    - awscli
-    - twilio
-    - sendgrid
+    - nest_asyncio
     - starlette-jwt
     - asyncpg
     - pika
     - aio_pika
     - redis
-    - nest_asyncio
+    - awscli
+    - twilio
+    - sendgrid
     - xlrd
     - xlwt
-    - seaborn
-    
+  
+  # - nbformat
+  # - opencv
+  # - librosa
