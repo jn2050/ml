@@ -6,13 +6,13 @@
 # Build ml image on cuda1
 cd ~/dev/lib/ml &&\
 ((git add .; git commit -m 'update'; git push) || true) &&\
-ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io -c "\
-    cd ~/lib && rm -rf ml && git clone https://github.com/jn2050/ml.git && cd ml &&\
+ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
+    "cd ~/lib && rm -rf ml && git clone https://github.com/jn2050/ml.git && cd ml &&\
     sudo docker build -t ml . &&\
     sudo docker tag ml digitallogic/private:ml &&\
     sudo docker push digitallogic/private:ml" &&\
-ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash "\
-    (sudo docker rm -f ml-jneto-jupyter 2> /dev/null || true) &&\
+ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash \
+    "(sudo docker rm -f ml-jneto-jupyter 2> /dev/null || true) &&\
     sudo docker pull digitallogic/private:ml &&\
     sudo docker run -d \
         --name ml-jneto-jupyter \
