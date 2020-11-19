@@ -12,7 +12,7 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
     sudo docker tag ml digitallogic/private:ml &&\
     sudo docker push digitallogic/private:ml" &&\
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash \
-    "sudo docker rm -f ml-jneto-jupyter 2> /dev/null" ||\
+    "sudo docker rm -f ml-jneto-jupyter 2> /dev/null"
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash \
     "sudo docker pull digitallogic/private:ml &&\
     sudo docker run -d \
