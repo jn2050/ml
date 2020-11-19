@@ -10,8 +10,10 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io "\
     cd ~/lib && rm -rf ml && git clone https://github.com/jn2050/ml.git && cd ml &&\
     sudo docker build -t ml . &&\
     sudo docker tag ml digitallogic/private:ml &&\
-    sudo docker push digitallogic/private:ml
-" &&\
+    sudo docker push digitallogic/private:ml 
+"
+exit 0
+# &&\
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "\
     (sudo docker rm -f ml-jneto-jupyter 2> /dev/null || true) &&\
     sudo docker pull digitallogic/private:ml &&\
@@ -23,7 +25,7 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "\
         -p 8001:8888 \
         -v /home/jneto/dev:/users/ml/dev \
         -v /dataf:/users/ml/dev/data \
-        digitallogic/private:ml /bin/bash scripts/ju.sh
+        digitallogic/private:ml /bin/bash scripts/ju.sh \
 " &&\
 docker pull digitallogic/private:ml &&\
 docker rm -f ml-jupyter 2> /dev/null &&\
