@@ -3,7 +3,8 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     apt-get update &&\
     apt-get install -y --fix-missing \
-        sudo bash wget curl rsync vim-nox uuid-dev gfortran-6 python python3-pip git git-core
+        sudo bash wget curl rsync vim-nox uuid-dev gfortran-6 python python3-pip git git-core \
+        ffmpeg libsm6 libxext6
 
 ENV DOCKER_VER=18.06.3-ce    
 ENV DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VER}.tgz
@@ -50,15 +51,16 @@ RUN cd $HOME/downloads &&\
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 
-# RUN conda install -y -c anaconda opencv
-RUN conda install -y -c conda-forge opencv
 RUN conda install -y tensorflow-gpu
 RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
+RUN pip install opencv-python
 
 RUN jupyter contrib nbextension install --user
 
+RUN pip install dl2050utils==1.0.12
+RUN pip install dl2050nn2==1.0.37
+
+# COPY --chown=ml:ml lib/nn2/ $HOME/lib/nn2
+# RUN pip install -e $HOME/lib/nn2
+
 # ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
-RUN pip install -U dlogicutils
-COPY --chown=ml:ml lib/nn2/ $HOME/lib/nn2
-RUN pip install -e $HOME/lib/nn2
-# sudo chown -R ml:ml $HOME/lib/nn2 && 

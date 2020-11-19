@@ -30,7 +30,3 @@ dependencies:
     - sendgrid
     - xlrd
     - xlwt
-  
-  # - nbformat
-  # - opencv
-  # - librosa
