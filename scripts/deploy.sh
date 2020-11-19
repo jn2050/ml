@@ -5,25 +5,28 @@
 
 # Build ml image on cuda1
 cd ~/dev/lib/ml &&\
+((git add .; git commit -m 'update'; git push) || true) &&\
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io "\
     cd ~/lib && rm -rf ml && git clone https://github.com/jn2050/ml.git && cd ml &&\
     sudo docker build -t ml . &&\
     sudo docker tag ml digitallogic/private:ml &&\
     sudo docker push digitallogic/private:ml
 " &&\
-docker pull digitallogic/private:ml
-
-# cd ~/lib/ml && sudo docker build -t ml .
-# sudo docker tag ml digitallogic/private:ml
-# sudo docker push digitallogic/private:ml
-## sudo docker run -it --rm ml /bin/bash
-
-# sudo docker login
-# sudo docker pull digitallogic/private:ml
-
-# Launch ml-jupyter on mac
-sleep 20
-docker rm -f ml-jupyter 2> /dev/null
+ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "\
+    (sudo docker rm -f ml-jneto-jupyter 2> /dev/null || true) &&\
+    sudo docker pull digitallogic/private:ml &&\
+    sudo docker run -d \
+        --name ml-jneto-jupyter \
+        --restart unless-stopped \
+        --gpus all \
+        --privileged \
+        -p 8001:8888 \
+        -v /home/jneto/dev:/users/ml/dev \
+        -v /dataf:/users/ml/dev/data \
+        digitallogic/private:ml /bin/bash scripts/ju.sh
+" &&\
+docker pull digitallogic/private:ml &&\
+docker rm -f ml-jupyter 2> /dev/null &&\
 docker run -dit \
     --name ml-jupyter \
     --restart unless-stopped \
@@ -33,10 +36,11 @@ docker run -dit \
     -v /Users/jneto/dev:/users/ml/dev \
     -v /Users/jneto/data:/users/ml/data \
     digitallogic/private:ml /bin/bash scripts/ju.sh
-# docker rm -f ml-jupyter
 
 # ml-sh on mac
 # docker run -it --rm --name ml-sh -v ~/dev:/users/ml/dev -v ~/data:/users/ml/data digitallogic/private:ml /bin/bash
+
+exit 0
 
 # Launch ml-jneto-jupyter on cuda1
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "
@@ -55,8 +59,6 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "
 
 # ml-sh on cuda1
 # sudo docker run -it --rm --name ml-jneto-sh -v ~/dev:/users/ml/dev -v /dataf:/users/ml/data digitallogic/private:ml /bin/bash
-
-exit 0
 
 # ml-pneto-jupyter on cuda1
 sudo docker run -d \
@@ -79,11 +81,18 @@ sudo docker run -d \
 # docker tag ml digitallogic/private:ml
 # docker push digitallogic/private:ml
 
+# Build ml image on cuda1
+# cd ~/lib/ml && sudo docker build -t ml .
+# sudo docker tag ml digitallogic/private:ml
+# sudo docker push digitallogic/private:ml
+## sudo docker run -it --rm ml /bin/bash
+
 # Environment with db
 # docker stack rm ml
 # docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
 # docker exec -it `docker ps | grep ml_db | awk '{print $1}'` /usr/bin/psql -U postgres
 # docker stack rm ml
 
+# sudo docker login
 # docker system prune --all
 # --no-cache
