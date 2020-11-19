@@ -57,8 +57,11 @@ RUN pip install opencv-python
 
 RUN jupyter contrib nbextension install --user
 
-RUN pip install dl2050utils==1.0.12
-RUN pip install dl2050nn==1.0.37
+RUN pip install dl2050utils
+RUN pip install dl2050nn
+
+# RUN pip install dl2050utils==1.0.12
+# RUN pip install dl2050nn==1.0.37
 
 # ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 # COPY --chown=ml:ml lib/nn2/ $HOME/lib/nn2
