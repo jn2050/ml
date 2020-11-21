@@ -59,6 +59,7 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "
 # sudo docker run -it --rm --name ml-jneto-sh -v ~/dev:/users/ml/dev -v /dataf:/users/ml/data digitallogic/private:ml /bin/bash
 
 # ml-pneto-jupyter on cuda1
+sudo docker rm -f ml-pneto-jupyter
 sudo docker run -d \
     --name ml-pneto-jupyter \
     --restart unless-stopped \
