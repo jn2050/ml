@@ -28,7 +28,7 @@ docker rm -f ml-jupyter 2> /dev/null &&\
 docker run -dit \
     --name ml-jupyter \
     --restart unless-stopped \
-    --privileged \
+    --network test \
     -p 8888:8888 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /Users/jneto/dev:/users/ml/dev \
@@ -40,6 +40,9 @@ docker run -dit \
 
 exit 0
 
+# sudo docker network create --driver bridge test
+# docker run -d --name postgres-test --network test -p 5432:5432 -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=rootroot postgres
+
 # Launch ml-jneto-jupyter on cuda1
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "
     (sudo docker rm -f ml-jneto-jupyter 2> /dev/null || true) &&\
@@ -48,8 +51,9 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "
         --name ml-jneto-jupyter \
         --restart unless-stopped \
         --gpus all \
-        --privileged \
+        --network test \
         -p 8001:8888 \
+        -v /var/run/docker.sock:/var/run/docker.sock \
         -v /home/jneto/dev:/users/ml/dev \
         -v /dataf:/users/ml/dev/data \
         digitallogic/private:ml /bin/bash scripts/ju.sh
@@ -59,12 +63,12 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "
 # sudo docker run -it --rm --name ml-jneto-sh -v ~/dev:/users/ml/dev -v /dataf:/users/ml/data digitallogic/private:ml /bin/bash
 
 # ml-pneto-jupyter on cuda1
-sudo docker rm -f ml-pneto-jupyter
+(sudo docker rm -f ml-pneto-jupyter 2> /dev/null || true) &&\
+sudo docker pull digitallogic/private:ml &&\
 sudo docker run -d \
     --name ml-pneto-jupyter \
     --restart unless-stopped \
     --gpus all \
-    --privileged \
     -p 9000:8888 \
     -v /home/pneto:/users/ml/dev \
     -v /dataf:/users/ml/dev/data \

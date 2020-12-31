@@ -57,6 +57,8 @@ RUN pip install opencv-python
 
 RUN jupyter contrib nbextension install --user
 
+RUN pip install 'syft>=0.2.0,<0.3.0'
+
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install dl2050utils
 RUN pip install dl2050nn
