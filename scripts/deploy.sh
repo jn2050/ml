@@ -40,6 +40,7 @@ docker run -dit \
 
 exit 0
 
+# Environment with db
 # sudo docker network create --driver bridge test
 # docker run -d --name postgres-test --network test -p 5432:5432 -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=rootroot postgres
 
@@ -89,12 +90,6 @@ sudo docker run -d \
 # sudo docker tag ml digitallogic/private:ml
 # sudo docker push digitallogic/private:ml
 ## sudo docker run -it --rm ml /bin/bash
-
-# Environment with db
-# docker stack rm ml
-# docker stack deploy -c /Users/jneto/dev/lib/ml/docker-compose-db-test.yml ml
-# docker exec -it `docker ps | grep ml_db | awk '{print $1}'` /usr/bin/psql -U postgres
-# docker stack rm ml
 
 # sudo docker login
 # docker system prune --all
