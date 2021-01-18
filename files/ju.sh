@@ -1,4 +1,3 @@
-
 cd $HOME/dev
 jupyter nbextension enable collapsible_headings/main
 jupyter nbextension enable highlight_selected_word/main

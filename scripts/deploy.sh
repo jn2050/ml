@@ -28,21 +28,31 @@ docker rm -f ml-jupyter 2> /dev/null &&\
 docker run -dit \
     --name ml-jupyter \
     --restart unless-stopped \
-    --network test \
     -p 8888:8888 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /Users/jneto/dev:/users/ml/dev \
     -v /Users/jneto/data:/users/ml/data \
     digitallogic/private:ml /bin/bash scripts/ju.sh
 
+# --network test
 # ml-sh on mac
 # docker run -it --rm --name ml-sh -v ~/dev:/users/ml/dev -v ~/data:/users/ml/data digitallogic/private:ml /bin/bash
 
 exit 0
 
 # Environment with db
-# sudo docker network create --driver bridge test
-# docker run -d --name postgres-test --network test -p 5432:5432 -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=rootroot postgres
+# docker network create --driver bridge test
+docker run -d \
+    --name dbtest \
+    --network test \
+    -p 5432:5432 \
+    -e POSTGRES_DB=postgres \
+    -e POSTGRES_USER=postgres \
+    -e POSTGRES_PASSWORD=rootroot postgres \
+    -v olap:/data
+    postgres
+
+exit 0
 
 # Launch ml-jneto-jupyter on cuda1
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io /bin/bash -c "
