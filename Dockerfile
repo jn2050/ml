@@ -51,7 +51,7 @@ RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 
 RUN conda install -y tensorflow-gpu
-RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
+# RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
 RUN pip install opencv-python
 
 RUN jupyter contrib nbextension install --user

@@ -5,12 +5,6 @@ RUN export DEBIAN_FRONTEND=noninteractive &&\
     apt-get install -y --fix-missing \
         sudo wget curl rsync vim-nox python3-pip git git-core iputils-ping
 
-ENV DOCKER_VER=18.06.3-ce    
-ENV DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VER}.tgz
-RUN curl -fsSLO $DOCKER_URL &&\
-    tar xzvf docker-${DOCKER_VER}.tgz --strip 1 -C /usr/local/bin docker/docker &&\
-    rm docker-${DOCKER_VER}.tgz
-
 ENV HOME=/users/ml
 RUN echo "ml ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
     groupadd -g 999 ml &&\
@@ -49,24 +43,7 @@ RUN cd $HOME/downloads &&\
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 
-RUN conda install -y tensorflow-gpu
-RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
-RUN pip install opencv-python
-
 RUN jupyter contrib nbextension install --user
-
-RUN sudo apt update &&\
-    sudo apt -y install nodejs &&\
-    sudo apt -y install npm &&\
-    sudo npm install -g ijavascript &&\
-    ijsinstall
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install dl2050utils
-RUN pip install dl2050nn
-
-# RUN pip install dl2050utils==1.0.12
-# RUN pip install dl2050nn==1.0.39
-
-# COPY --chown=ml:ml lib/nn2/ $HOME/lib/nn2
-# RUN pip install -e $HOME/lib/nn2
