@@ -1,10 +1,9 @@
-FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+FROM debian:10.9
 
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     apt-get update &&\
     apt-get install -y --fix-missing \
-        sudo bash wget curl rsync vim-nox uuid-dev gfortran-6 python python3-pip git git-core \
-        ffmpeg libsm6 libxext6 iputils-ping
+        sudo wget curl rsync vim-nox python3-pip git git-core iputils-ping
 
 ENV DOCKER_VER=18.06.3-ce    
 ENV DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VER}.tgz
