@@ -17,6 +17,7 @@ dependencies:
   - jupyter_contrib_nbextensions
   - xlsxwriter
   - matplotlib
+  - seaborn
   - scikit-learn
   - pip:
     - nest_asyncio
