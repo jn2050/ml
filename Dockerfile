@@ -50,10 +50,6 @@ RUN cd $HOME/downloads &&\
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 
-RUN conda install -y tensorflow-gpu
-# RUN conda install -y -c fastai -c pytorch -c anaconda fastai gh anaconda
-RUN pip install opencv-python
-
 RUN jupyter contrib nbextension install --user
 
 RUN sudo apt update &&\
@@ -62,14 +58,9 @@ RUN sudo apt update &&\
     sudo npm install -g ijavascript &&\
     ijsinstall
 
-RUN conda install -y -c rapidsai -c nvidia -c numba -c conda-forge cudf=0.18 python=3.8
-
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install dl2050utils
 RUN pip install dl2050nn
-
-# RUN pip install dl2050utils==1.0.12
-# RUN pip install dl2050nn==1.0.39
 
 # COPY --chown=ml:ml lib/nn2/ $HOME/lib/nn2
 # RUN pip install -e $HOME/lib/nn2
