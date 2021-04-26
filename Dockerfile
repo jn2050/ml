@@ -33,13 +33,13 @@ RUN sudo chown -R ml:ml $HOME &&\
     mkdir $HOME/.jupyter && cp $HOME/files/jupyter_notebook_config.py $HOME/.jupyter/jupyter_notebook_config.py &&\
     mkdir $HOME/scripts && cp $HOME/files/ju.sh $HOME/scripts && chmod 777 $HOME/scripts/* &&\
     mkdir $HOME/dev
-
-ENV PATH="$HOME/anaconda3/bin:$PATH"
-ENV PATH="/usr/local/anaconda3/bin:$PATH"
-ENV ANACONDA_VER=Anaconda3-2020.07-Linux-x86_64.sh
 ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
 
+ENV PATH="$HOME/anaconda3/bin:$PATH"
+# ENV PATH="/usr/local/anaconda3/bin:$PATH"
+# ENV ANACONDA_VER=Anaconda3-2020.07-Linux-x86_64.sh
+ENV ANACONDA_VER=Anaconda3-2020.11-Linux-x86_64.sh
 RUN pip3 install --upgrade pip
 RUN cd $HOME/downloads &&\
     wget -q https://repo.anaconda.com/archive/$ANACONDA_VER &&\
@@ -47,9 +47,9 @@ RUN cd $HOME/downloads &&\
     rm $ANACONDA_VER &&\
     conda update -y -n base -c defaults conda &&\
     conda init bash
+
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
-
 RUN jupyter contrib nbextension install --user
 
 RUN sudo apt update &&\
