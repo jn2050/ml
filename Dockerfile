@@ -1,10 +1,11 @@
-FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+#FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+FROM nvidia/cuda:11.1-devel-ubuntu20.04
 
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     apt-get update &&\
     apt-get install -y --fix-missing \
         sudo bash wget curl rsync vim-nox uuid-dev gfortran-6 python python3-pip git git-core \
-        ffmpeg libsm6 libxext6 iputils-ping postgresql-client
+        locate ffmpeg libsm6 libxext6 iputils-ping postgresql-client
 
 ENV DOCKER_VER=18.06.3-ce    
 ENV DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VER}.tgz
