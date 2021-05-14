@@ -4,7 +4,7 @@ FROM nvidia/cuda:11.1-devel-ubuntu20.04
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     apt-get update &&\
     apt-get install -y --fix-missing \
-        sudo bash wget curl rsync vim-nox uuid-dev gfortran-6 python python3-pip git git-core \
+        sudo bash wget curl rsync vim-nox uuid-dev python python3-pip git git-core \
         locate ffmpeg libsm6 libxext6 iputils-ping postgresql-client
 
 ENV DOCKER_VER=18.06.3-ce    
