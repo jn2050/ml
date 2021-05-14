@@ -53,11 +53,11 @@ RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 RUN jupyter contrib nbextension install --user
 
-RUN sudo apt update &&\
-    sudo apt -y install nodejs &&\
-    sudo apt -y install npm &&\
-    sudo npm install -g ijavascript &&\
-    ijsinstall
+# RUN sudo apt update &&\
+#     sudo apt -y install nodejs &&\
+#     sudo apt -y install npm &&\
+#     sudo npm install -g ijavascript &&\
+#     ijsinstall
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install dl2050utils
