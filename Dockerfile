@@ -7,6 +7,9 @@ RUN export DEBIAN_FRONTEND=noninteractive &&\
         sudo bash wget curl rsync vim-nox uuid-dev python python3-pip git git-core \
         locate ffmpeg libsm6 libxext6 iputils-ping postgresql-client
 
+ENV TZ=Europe/Lisbon
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 ENV DOCKER_VER=18.06.3-ce    
 ENV DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VER}.tgz
 RUN curl -fsSLO $DOCKER_URL &&\
