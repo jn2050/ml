@@ -23,6 +23,7 @@ dependencies:
     - nest_asyncio
     - starlette-jwt
     - asyncpg
+    - psycopg2-binary
     - pika
     - aio_pika
     - redis
