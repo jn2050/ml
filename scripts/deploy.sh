@@ -24,11 +24,12 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
         -v /dataf:/users/ml/dev/data \
         digitallogic/private:ml /bin/bash scripts/ju.sh" &&\
 docker pull digitallogic/private:ml &&\
-docker rm -f ml-jupyter 2> /dev/null &&\
+docker rm -f ju 2> /dev/null &&\
 docker run -dit \
-    --name ml-jupyter \
+    --name ju \
     --restart unless-stopped \
     -p 8888:8888 \
+    --network webnet \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /Users/jneto/dev:/users/ml/dev \
     -v /Users/jneto/data:/users/ml/data \
