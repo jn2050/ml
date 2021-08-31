@@ -7,7 +7,7 @@ cd ~/dev/lib/ml
 git add . && git commit -m 'update' || git push
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
     "cd ~/lib && rm -rf ml && git clone https://github.com/jn2050/ml.git && cd ml &&\
-    sudo docker build -t ml . &&\
+    sudo docker build -t ml . --no-cache &&\
     sudo docker tag ml digitallogic/private:ml &&\
     sudo docker push digitallogic/private:ml" &&\
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
@@ -24,16 +24,16 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
         -v /dataf:/users/ml/dev/data \
         digitallogic/private:ml /bin/bash scripts/ju.sh" &&\
 docker pull digitallogic/private:ml &&\
-docker rm -f ju 2> /dev/null &&\
-docker run -dit \
-    --name ju \
-    --restart unless-stopped \
+(docker rm -f ju 2> /dev/null || true) &&\
+docker run -d --name ju \
     -p 8888:8888 \
     --network webnet \
-    -v /var/run/docker.sock:/var/run/docker.sock \
+    --restart unless-stopped \
     -v /Users/jneto/dev:/users/ml/dev \
     -v /Users/jneto/data:/users/ml/data \
     digitallogic/private:ml /bin/bash scripts/ju.sh
+# -v /var/run/docker.sock:/var/run/docker.sock \
+
 
 # --network test
 # ml-sh on mac

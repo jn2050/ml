@@ -55,6 +55,7 @@ RUN cd $HOME/downloads &&\
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 RUN jupyter contrib nbextension install --user
+# RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch
 
 # RUN sudo apt update &&\
 #     sudo apt -y install nodejs &&\
