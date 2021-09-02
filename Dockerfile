@@ -1,20 +1,14 @@
 #FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
-FROM nvidia/cuda:11.1-devel-ubuntu20.04
+#FROM nvidia/cuda:11.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.4.1-devel-ubuntu20.04
 
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     apt-get update &&\
     apt-get install -y --fix-missing \
         sudo bash wget curl rsync vim-nox uuid-dev python python3-pip git git-core \
         locate ffmpeg libsm6 libxext6 iputils-ping postgresql-client
-
 ENV TZ=Europe/Lisbon
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-ENV DOCKER_VER=18.06.3-ce    
-ENV DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VER}.tgz
-RUN curl -fsSLO $DOCKER_URL &&\
-    tar xzvf docker-${DOCKER_VER}.tgz --strip 1 -C /usr/local/bin docker/docker &&\
-    rm docker-${DOCKER_VER}.tgz
 
 ENV HOME=/users/ml
 RUN echo "ml ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
@@ -41,9 +35,8 @@ ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
 
 ENV PATH="$HOME/anaconda3/bin:$PATH"
-# ENV PATH="/usr/local/anaconda3/bin:$PATH"
-# ENV ANACONDA_VER=Anaconda3-2020.07-Linux-x86_64.sh
-ENV ANACONDA_VER=Anaconda3-2020.11-Linux-x86_64.sh
+# ENV ANACONDA_VER=Anaconda3-2020.11-Linux-x86_64.sh
+ENV ANACONDA_VER=Anaconda3-2021.05-Linux-x86_64.sh
 RUN pip3 install --upgrade pip
 RUN cd $HOME/downloads &&\
     wget -q https://repo.anaconda.com/archive/$ANACONDA_VER &&\
@@ -51,21 +44,13 @@ RUN cd $HOME/downloads &&\
     rm $ANACONDA_VER &&\
     conda update -y -n base -c defaults conda &&\
     conda init bash
-
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 RUN jupyter contrib nbextension install --user
-# RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch
 
-# RUN sudo apt update &&\
-#     sudo apt -y install nodejs &&\
-#     sudo apt -y install npm &&\
-#     sudo npm install -g ijavascript &&\
-#     ijsinstall
+# RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch
+RUN conda install pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install dl2050utils
 RUN pip install dl2050nn
-
-# COPY --chown=ml:ml lib/nn2/ $HOME/lib/nn2
-# RUN pip install -e $HOME/lib/nn2
