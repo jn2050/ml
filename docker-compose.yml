@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+
+  ju-jn:
+    image: digitallogic/private:ml
+    privileged: true
+    restart: unless-stopped
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility 
+    deploy:
+      replicas: 1
+    ports:
+      - "8001:8888"
+    volumes:
+      - /home/jneto/dev:/users/ml/dev
+      - /dataf:/data
+
+networks:
+  webnet:
+    external: true

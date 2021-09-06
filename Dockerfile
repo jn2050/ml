@@ -54,3 +54,4 @@ RUN conda install pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install dl2050utils
 RUN pip install dl2050nn
+EXPOSE 8888

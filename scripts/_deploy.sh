@@ -13,8 +13,7 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
     "sudo docker rm -f ml-jneto-jupyter 2> /dev/null"
 ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
-    "sudo docker pull digitallogic/private:ml &&\
-    sudo docker run -d \
+    "sudo docker run -d \
         --name ml-jneto-jupyter \
         --restart unless-stopped \
         --gpus all \
@@ -34,24 +33,8 @@ docker run -d --name ju \
     digitallogic/private:ml /bin/bash scripts/ju.sh
 # -v /var/run/docker.sock:/var/run/docker.sock \
 
-
-# --network test
 # ml-sh on mac
 # docker run -it --rm --name ml-sh -v ~/dev:/users/ml/dev -v ~/data:/users/ml/data digitallogic/private:ml /bin/bash
-
-exit 0
-
-# Environment with db
-# docker network create --driver bridge test
-docker run -d \
-    --name dbtest \
-    --network test \
-    -p 5432:5432 \
-    -e POSTGRES_DB=postgres \
-    -e POSTGRES_USER=postgres \
-    -e POSTGRES_PASSWORD=rootroot postgres \
-    -v olap:/data
-    postgres
 
 exit 0
 

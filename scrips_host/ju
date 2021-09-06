@@ -1,0 +1,29 @@
+#!/bin/bash
+
+sudo docker-compose up
+sudo docker-compose down
+
+(sudo docker service rm ju-jn || true) &&\
+sudo docker service create --name ju-jn \
+    -p 8001:8888 \
+    --network webnet \
+    -e NVIDIA_VISIBLE_DEVICES=all \
+    -e NVIDIA_DRIVER_CAPABILITIES=compute,utility \
+    --mount type=bind,source=/home/jneto/dev,destination=/users/ml/dev \
+    --mount type=bind,source=/dataf,destination=/users/ml/dev/data \
+    digitallogic/private:ml /bin/bash scripts/ju.sh
+# --secret config.yml \
+#     --privileged \
+
+
+(sudo docker rm -f ju-jn || true) &&\
+sudo docker run -d --name ju-jn \
+    --privileged \
+    --restart unless-stopped \
+    --gpus all \
+    --network webnet \
+    -p 8001:8888 \
+    -v /home/jneto/dev:/users/ml/dev \
+    -v /dataf:/users/ml/dev/data \
+    digitallogic/private:ml /bin/bash scripts/ju.sh
+
