@@ -16,7 +16,7 @@ sudo docker service create --name ju-jn \
 #     --privileged \
 
 
-(sudo docker rm -f ju-jn || true) &&\
+(sudo docker rm -f ju-jn >/dev/null 2>&1 || true) &&\
 sudo docker run -d --name ju-jn \
     --privileged \
     --restart unless-stopped \
