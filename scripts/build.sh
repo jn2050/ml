@@ -1,6 +1,6 @@
 # ml deploy
 # RUN: ~/dev/lib/ml/scripts/deploy.sh
-# RUN: ml-build
+# ALIAS: ml-build
 
 # Build ml image on cuda1
 cd ~/dev/lib/ml
