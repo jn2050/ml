@@ -48,7 +48,7 @@ RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 RUN jupyter contrib nbextension install --user
 
-RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
+# RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
 
 RUN pip install --upgrade google-cloud-storage
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
