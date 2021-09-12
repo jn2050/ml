@@ -51,7 +51,8 @@ RUN jupyter contrib nbextension install --user
 # RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
 
 RUN pip install --upgrade google-cloud-storage
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
-RUN pip install dl2050utils
-RUN pip install dl2050nn
+RUN pip install --upgrade dl2050utils
+RUN pip install --upgrade dl2050nn
 EXPOSE 8888
+
+# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
