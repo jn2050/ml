@@ -1,0 +1,11 @@
+(sudo docker service rm ju >/dev/null 2>&1 || true) &&\
+sudo docker service create --name ju \
+    --mode global \
+    -e NVIDIA_VISIBLE_DEVICES=all \
+    --secret config.yml \
+    -p 8888:8888 \
+    --network webnet \
+    --mount type=bind,source=$HOME/dev,destination=/users/ml/dev \
+    --mount type=bind,source=$HOME/data,destination=/users/ml/dev/data \
+    digitallogic/private:ml /bin/bash scripts/ju.sh
+# --runtime=nvidia

@@ -1,0 +1,11 @@
+docker pull digitallogic/private:ml &&\
+(sudo docker rm -f ju-pn >/dev/null 2>&1 || true) &&\
+sudo docker run -d --name ju-pn \
+    --restart unless-stopped \
+    --gpus all \
+    --privileged \
+    --network webnet \
+    -p 9000:8888 \
+    -v /home/pneto/dev:/users/ml/dev \
+    -v /dataf:/users/ml/dev/data \
+    digitallogic/private:ml /bin/bash scripts/ju.sh

@@ -1,0 +1,9 @@
+# docker pull digitallogic/private:ml &&\
+# (docker rm -f ju 2> /dev/null || true) &&\
+# docker run -d --name ju \
+#     -p 8888:8888 \
+#     --network webnet \
+#     --restart unless-stopped \
+#     -v /Users/jneto/dev:/users/ml/dev \
+#     -v /Users/jneto/data:/users/ml/data \
+#     digitallogic/private:ml /bin/bash scripts/ju.sh

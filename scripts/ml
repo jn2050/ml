@@ -1,0 +1,5 @@
+sudo docker run -it --rm --name ml-sh \
+    --network webnet \
+    -v /home/jneto/dev:/users/ml/dev \
+    -v /dataf:/users/ml/data \
+    digitallogic/private:ml /bin/bash

@@ -10,3 +10,14 @@ ssh -i ~/.ssh/jn2020 -p 9022 jneto@ml.dlogic.io \
     sudo docker build -t ml . &&\
     sudo docker tag ml digitallogic/private:ml &&\
     sudo docker push digitallogic/private:ml"
+exit 0
+
+# --no-cache
+# export PATH="~/scripts:$PATH"
+
+
+# Build pythorch image on cuda
+cd ~/lib/ml &&\
+sudo docker build -f pytorch.Dockerfile -t ml-pytorch . &&\
+sudo docker tag ml-pytorch digitallogic/private:ml-pytorch &&\
+sudo docker push digitallogic/private:ml-pytorch

@@ -1,0 +1,5 @@
+docker run -it --rm --name ml-sh \
+    --network webnet \
+    -v ~/dev:/users/ml/dev \
+    -v ~/data:/users/ml/data \
+    digitallogic/private:ml /bin/bash
