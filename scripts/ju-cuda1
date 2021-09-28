@@ -3,10 +3,10 @@ sudo docker pull digitallogic/private:ml &&\
 sudo docker service create --name ju \
     --mode global \
     -e NVIDIA_VISIBLE_DEVICES=all \
-    -p 8001:8888 \
     --network webnet \
+    --publish published=8001,target=8888,mode=host \
     --mount type=bind,source=$HOME/dev,destination=/users/ml/dev \
-    --mount type=bind,source=/data,destination=/users/ml/dev/data \
+    --mount type=bind,source=/dataf,destination=/data \
     digitallogic/private:ml /bin/bash scripts/ju.sh
 # --secret config.yml \
 # --runtime=nvidia

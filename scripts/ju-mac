@@ -3,8 +3,8 @@ sudo docker pull digitallogic/private:ml &&\
 sudo docker service create --name ju \
     --mode global \
     --secret config.yml \
-    -p 8888:8888 \
     --network webnet \
+    -p 8888:8888 \
     --mount type=bind,source=$HOME/dev,destination=/users/ml/dev \
     --mount type=bind,source=$HOME/data,destination=/users/ml/dev/data \
     digitallogic/private:ml /bin/bash scripts/ju.sh
