@@ -1,5 +1,6 @@
 name: ml
 dependencies:
+  - pip
   - requests 
   - uvicorn
   - starlette
