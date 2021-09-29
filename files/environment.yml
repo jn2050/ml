@@ -1,4 +1,6 @@
 name: ml
+channels:
+  - conda-forge
 dependencies:
   - pip
   - requests 

@@ -12,12 +12,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ENV HOME=/users/ml
 RUN echo "ml ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers &&\
-    groupadd -g 999 ml &&\
-    useradd -r -u 999 -g ml ml &&\
+    groupadd -g 999 ml && useradd -r -u 999 -g ml ml &&\
     mkdir -p $HOME &&\
-    usermod -d $HOME ml &&\
-    usermod -s /bin/bash ml &&\
-    chown ml:ml $HOME &&\
+    usermod -d $HOME ml && usermod -s /bin/bash ml && chown ml:ml $HOME &&\
     mkdir $HOME/downloads && chown ml:ml $HOME/downloads && chmod 777 $HOME/downloads
 USER ml
 WORKDIR $HOME
