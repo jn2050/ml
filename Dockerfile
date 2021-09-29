@@ -1,5 +1,3 @@
-#FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
-#FROM nvidia/cuda:11.1-devel-ubuntu20.04
 FROM nvidia/cuda:11.4.1-devel-ubuntu20.04
 
 RUN export DEBIAN_FRONTEND=noninteractive &&\

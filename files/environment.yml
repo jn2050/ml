@@ -35,3 +35,4 @@ dependencies:
     - jupyter_contrib_nbextensions
     - fire
     - feather-format
+    - pyjwt

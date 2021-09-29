@@ -1,5 +1,5 @@
 # ml deploy
-# RUN: ~/dev/lib/ml/scripts/deploy.sh
+# RUN: $HOME/dev/lib/ml/scripts/build.sh
 # ALIAS: ml-build
 
 # Build ml image on cuda1
@@ -11,14 +11,5 @@ ssh -i ~/.ssh/jn2020 -p 9021 jneto@cuda1.dl2050.com \
     sudo docker push digitallogic/private:ml"
 exit 0
 
+# sudo docker run -it --rm ml /bin/bash
 # --no-cache
-# export PATH="~/scripts:$PATH"
-
-# Debug
-sudo docker run -it --rm ml /bin/bash
-
-# Build pythorch image on cuda
-cd ~/lib/ml &&\
-sudo docker build -f pytorch.Dockerfile -t ml-pytorch . &&\
-sudo docker tag ml-pytorch digitallogic/private:ml-pytorch &&\
-sudo docker push digitallogic/private:ml-pytorch
