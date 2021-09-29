@@ -36,7 +36,7 @@ ENV CONDA_VER=Miniconda3-py39_4.10.3-Linux-x86_64.sh
 ENV CONDA_URL=https://repo.anaconda.com/miniconda
 ENV PATH="$HOME/miniconda3/bin:$PATH"
 RUN cd $HOME/downloads && wget -q $CONDA_URL/$CONDA_VER && bash $CONDA_VER -b && rm $CONDA_VER
-RUN conda env create -f $HOME/files/environment.yml
+RUN sudo conda env create --debug -f $HOME/files/environment.yml
 RUN conda init bash && echo "conda activate ml" >> ~/.bashrc &&\
     jupyter contrib nbextension install --user
 
