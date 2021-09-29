@@ -8,13 +8,11 @@ dependencies:
   - bcrypt
   - yaml
   - boto3
-  - feather-format
   - xlsxwriter
   - matplotlib
   - seaborn
   - scikit-learn
   - openpyxl
-  - python-dotenv
   - pip:
     - nest_asyncio
     - starlette-jwt
@@ -30,6 +28,7 @@ dependencies:
     - xlwt
     - schedule
     - aiohttp
+    - python-dotenv
     - uvicorn
     - starlette
     - jupyter_contrib_nbextensions
