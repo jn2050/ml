@@ -35,17 +35,16 @@ ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
 
 ENV PATH="$HOME/anaconda3/bin:$PATH"
-ENV ANACONDA_VER=Anaconda3-2021.05-Linux-x86_64.sh
+ENV CONDA_VER=Miniconda3-py39_4.9.2-Linux-x86_64.sh
 RUN pip3 install --upgrade pip
 RUN cd $HOME/downloads &&\
-    wget -q https://repo.anaconda.com/archive/$ANACONDA_VER &&\
-    bash $ANACONDA_VER -b &&\
-    rm $ANACONDA_VER &&\
-    conda update -y -n base -c defaults conda &&\
-    conda init bash
-RUN conda env create -f $HOME/files/environment.yml &&\
-    echo "conda activate ml" >> ~/.bashrc
-RUN jupyter contrib nbextension install --user
+    wget -q https://repo.anaconda.com/archive/$CONDA_VER &&\
+    bash $CONDA_VER -b &&\
+    rm $CONDA_VER
+RUN conda env create -f $HOME/files/environment.yml
+RUN echo "conda activate ml" >> ~/.bashrc &&\
+    conda init bash &&\
+    jupyter contrib nbextension install --user
 
 # RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
 
@@ -55,3 +54,17 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install --upgrade dl2050utils
 RUN pip install --upgrade dl2050nn
 EXPOSE 8888
+
+
+# ENV PATH="$HOME/anaconda3/bin:$PATH"
+# ENV ANACONDA_VER=Anaconda3-2021.05-Linux-x86_64.sh
+# RUN pip3 install --upgrade pip
+# RUN cd $HOME/downloads &&\
+#     wget -q https://repo.anaconda.com/archive/$ANACONDA_VER &&\
+#     bash $ANACONDA_VER -b &&\
+#     rm $ANACONDA_VER &&\
+#     conda update -y -n base -c defaults conda &&\
+#     conda init bash
+# RUN conda env create -f $HOME/files/environment.yml &&\
+#     echo "conda activate ml" >> ~/.bashrc
+# RUN jupyter contrib nbextension install --user
