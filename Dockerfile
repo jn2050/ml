@@ -35,7 +35,6 @@ ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
 
 ENV PATH="$HOME/anaconda3/bin:$PATH"
-# ENV ANACONDA_VER=Anaconda3-2020.11-Linux-x86_64.sh
 ENV ANACONDA_VER=Anaconda3-2021.05-Linux-x86_64.sh
 RUN pip3 install --upgrade pip
 RUN cd $HOME/downloads &&\
@@ -44,7 +43,6 @@ RUN cd $HOME/downloads &&\
     rm $ANACONDA_VER &&\
     conda update -y -n base -c defaults conda &&\
     conda init bash
-RUN conda config --set channel_priority strict
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 RUN jupyter contrib nbextension install --user
