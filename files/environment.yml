@@ -4,20 +4,16 @@ channels:
 dependencies:
   - pip
   - requests 
-  - uvicorn
-  - starlette
   - bcrypt
-  - python-dotenv
   - yaml
-  - fire
   - boto3
   - feather-format
-  - jupyter_contrib_nbextensions
   - xlsxwriter
   - matplotlib
   - seaborn
   - scikit-learn
   - openpyxl
+  - python-dotenv
   - pip:
     - nest_asyncio
     - starlette-jwt
@@ -33,3 +29,8 @@ dependencies:
     - xlwt
     - schedule
     - aiohttp
+    - uvicorn
+    - starlette
+    - jupyter_contrib_nbextensions
+    - fire
+    - feather-format
