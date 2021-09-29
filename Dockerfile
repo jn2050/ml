@@ -37,8 +37,8 @@ ENV CONDA_URL=https://repo.anaconda.com/miniconda
 ENV PATH="$HOME/miniconda3/bin:$PATH"
 RUN cd $HOME/downloads && wget -q $CONDA_URL/$CONDA_VER && bash $CONDA_VER -b && rm $CONDA_VER
 RUN conda env create -f $HOME/files/environment.yml &&\
-    conda init bash && echo "conda activate ml" >> ~/.bashrc &&\
-    conda activate ml && jupyter contrib nbextension install --user
+    conda init bash && echo "conda activate ml" >> $HOME/.bashrc &&\
+    source $HOME/.bashrc && jupyter contrib nbextension install --user
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
 RUN pip install --upgrade dl2050utils
