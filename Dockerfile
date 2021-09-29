@@ -44,6 +44,7 @@ RUN cd $HOME/downloads &&\
     rm $ANACONDA_VER &&\
     conda update -y -n base -c defaults conda &&\
     conda init bash
+RUN conda config --set channel_priority strict
 RUN conda env create -f $HOME/files/environment.yml &&\
     echo "conda activate ml" >> ~/.bashrc
 RUN jupyter contrib nbextension install --user
