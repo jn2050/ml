@@ -1,6 +1,6 @@
 name: ml
 channels:
-  - conda-forge
+  # - conda-forge
 dependencies:
   - python=3.7
   - pip
