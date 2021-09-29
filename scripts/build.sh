@@ -15,6 +15,8 @@ exit 0
 # --no-cache
 # export PATH="~/scripts:$PATH"
 
+# Debug
+sudo docker run -it --rm ml /bin/bash
 
 # Build pythorch image on cuda
 cd ~/lib/ml &&\

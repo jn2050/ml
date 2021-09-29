@@ -1,11 +1,6 @@
 name: ml
-channels:
-  - anaconda
-  - conda-forge
 dependencies:
-  - python>=3.7
-  - pip
-  - requests
+  - requests 
   - uvicorn
   - starlette
   - bcrypt

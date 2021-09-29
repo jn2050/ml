@@ -34,26 +34,27 @@ RUN sudo chown -R ml:ml $HOME &&\
 ENV BASH_ENV ~/.bashrc
 SHELL ["/bin/bash", "-c"]
 
-ENV PATH="$HOME/anaconda3/bin:$PATH"
-ENV CONDA_VER=Miniconda3-py39_4.9.2-Linux-x86_64.sh
-ENV CONDA_URL=https://repo.anaconda.com/miniconda/
-# RUN pip3 install --upgrade pip
-# #ENV PATH="/users/ml/.local/bin:$PATH"
+# Miniconda: 2021-07-21, 63.6M
+ENV CONDA_VER=Miniconda3-py39_4.10.3-Linux-x86_64.sh
+ENV CONDA_URL=https://repo.anaconda.com/miniconda
+ENV PATH="$HOME/miniconda3/bin:$PATH"
 RUN cd $HOME/downloads && wget -q $CONDA_URL/$CONDA_VER && bash $CONDA_VER -b && rm $CONDA_VER
-
-# RUN conda env create -f $HOME/files/environment.yml
-# RUN echo "conda activate ml" >> ~/.bashrc &&\
-#     conda init bash &&\
-#     jupyter contrib nbextension install --user
+RUN conda env create -f $HOME/files/environment.yml
+RUN conda init bash && echo "conda activate ml" >> ~/.bashrc &&\
+    jupyter contrib nbextension install --user
 
 # RUN conda install -y pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c nvidia
 
-# RUN pip install --upgrade google-cloud-storage
-# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
-# RUN pip install --upgrade dl2050utils
-# RUN pip install --upgrade dl2050nn
+RUN pip install --upgrade google-cloud-storage
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skip_cache
+RUN pip install --upgrade dl2050utils
+RUN pip install --upgrade dl2050nn
+
+
 # EXPOSE 8888
 
+# RUN pip3 install --upgrade pip
+# #ENV PATH="/users/ml/.local/bin:$PATH"
 
 # ENV PATH="$HOME/anaconda3/bin:$PATH"
 # ENV ANACONDA_VER=Anaconda3-2021.05-Linux-x86_64.sh
