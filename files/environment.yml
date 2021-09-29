@@ -13,6 +13,7 @@ dependencies:
   - seaborn
   - scikit-learn
   - openpyxl
+  - jupyter
   - pip:
     - nest_asyncio
     - starlette-jwt
